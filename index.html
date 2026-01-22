@@ -1,531 +1,524 @@
 ```html
 <!doctype html>
 <html lang="ru">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Тест: Горбатый кит и гидроэнергетика</title>
   <style>
-    :root {
-      --bg1: #070b18;
-      --bg2: #061a2a;
-      --card: rgba(255, 255, 255, .08);
-      --stroke: rgba(255, 255, 255, .16);
-      --text: rgba(255, 255, 255, .92);
-      --muted: rgba(255, 255, 255, .72);
-      --ok: #19d39b;
-      --bad: #ff5c7a;
-      --accent: #6ae4ff;
-      --accent2: #7c5cff;
-      --shadow: 0 18px 60px rgba(0, 0, 0, .45);
-      --radius: 20px;
+    :root{
+      --bg1:#070b18;
+      --bg2:#061a2a;
+
+      --card: rgba(255,255,255,.07);
+      --card2: rgba(255,255,255,.10);
+      --stroke: rgba(255,255,255,.16);
+
+      --text: rgba(255,255,255,.94);
+      --muted: rgba(255,255,255,.72);
+
+      --ok:#19d39b;
+      --bad:#ff5c7a;
+
+      --accent:#6ae4ff;
+      --accent2:#7c5cff;
+
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius: 22px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body{
+      margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(1000px 600px at 20% 10%, rgba(124, 92, 255, .25), transparent 60%),
-        radial-gradient(800px 500px at 80% 20%, rgba(106, 228, 255, .20), transparent 55%),
+        radial-gradient(1000px 600px at 20% 10%, rgba(124,92,255,.25), transparent 60%),
+        radial-gradient(800px 500px at 80% 20%, rgba(106,228,255,.20), transparent 55%),
         linear-gradient(160deg, var(--bg1), var(--bg2));
-      min-height: 100vh;
-      overflow-x: hidden;
+      min-height:100vh;
+      overflow-x:hidden;
     }
 
     /* subtle noise overlay */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
-      mix-blend-mode: overlay;
-      opacity: .18;
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+      opacity:.18;
     }
 
-    .container {
-      width: min(1100px, 92vw);
-      margin: 0 auto;
-    }
+    a { color: inherit; text-decoration: none; }
+    .container{ width:min(1100px, 92vw); margin: 0 auto; }
 
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
+    /* Header */
+    header{
+      position:sticky;
+      top:0;
+      z-index:50;
       backdrop-filter: blur(14px);
-      background: rgba(7, 11, 24, .38);
-      border-bottom: 1px solid rgba(255, 255, 255, .10);
+      background: rgba(7,11,24,.40);
+      border-bottom: 1px solid rgba(255,255,255,.10);
     }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
       padding: 14px 0;
       gap: 12px;
     }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      letter-spacing: .2px;
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      letter-spacing:.2px;
+      white-space:nowrap;
     }
-
-    .brand .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
+    .brand .dot{
+      width:10px;height:10px;border-radius:50%;
       background: radial-gradient(circle at 30% 30%, var(--accent), var(--accent2));
-      box-shadow: 0 0 18px rgba(106, 228, 255, .45);
+      box-shadow: 0 0 18px rgba(106,228,255,.45);
+      flex: 0 0 auto;
     }
-
-    .navlinks {
-      display: flex;
-      gap: 16px;
+    .brand span{
+      background: linear-gradient(90deg, rgba(255,255,255,.95), rgba(255,255,255,.82));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .navlinks{
+      display:flex;
+      gap:12px;
       font-size: 14px;
       color: var(--muted);
-      flex-wrap: wrap;
-      justify-content: flex-end;
+      flex-wrap:wrap;
+      justify-content:flex-end;
     }
-
-    .navlinks a {
-      padding: 8px 10px;
+    .navlinks a{
+      padding:8px 10px;
       border-radius: 12px;
       transition: transform .15s ease, background .2s ease, color .2s ease;
     }
-
-    .navlinks a:hover {
-      background: rgba(255, 255, 255, .08);
+    .navlinks a:hover{
+      background: rgba(255,255,255,.08);
       color: var(--text);
       transform: translateY(-1px);
     }
 
-    section {
-      padding: 18px 0 34px;
-    }
+    section{ padding: 18px 0 34px; }
 
-    /* Hero */
-    .hero {
-      padding: 36px 0 18px;
-    }
-
-    .heroGrid {
-      display: grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap: 22px;
-      align-items: stretch;
-    }
-
-    .heroCard {
-      border: 1px solid rgba(255, 255, 255, .14);
-      background: linear-gradient(180deg, rgba(255, 255, 255, .10), rgba(255, 255, 255, .06));
+    /* Cards */
+    .card{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      overflow: hidden;
-      position: relative;
-      min-height: 360px;
+      overflow:hidden;
+      position:relative;
     }
-
-    .heroImg {
-      position: absolute;
-      inset: 0;
+    .card::after{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      border-radius: inherit;
+      pointer-events:none;
+      opacity:.45;
       background:
-        linear-gradient(180deg, rgba(0, 0, 0, .18), rgba(0, 0, 0, .62)),
-        url("https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=2000&q=80");
-      background-size: cover;
-      background-position: center;
-      transform: scale(1.02);
+        radial-gradient(420px 240px at 20% 10%, rgba(106,228,255,.18), transparent 60%),
+        radial-gradient(420px 240px at 80% 20%, rgba(124,92,255,.16), transparent 60%);
+      mix-blend-mode: screen;
+    }
+    .cardHeader{
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+      position:relative;
+      z-index:1;
     }
 
-    .heroContent {
-      position: relative;
-      padding: 26px 22px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      height: 100%;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      width: fit-content;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, .18);
-      background: rgba(0, 0, 0, .22);
-      color: rgba(255, 255, 255, .86);
-      font-size: 13px;
-      backdrop-filter: blur(10px);
-    }
-
-    h1 {
-      margin: 12px 0 8px;
-      font-size: clamp(26px, 4vw, 44px);
-      line-height: 1.05;
-      letter-spacing: -.6px;
-    }
-
-    .lead {
-      margin: 0;
-      color: rgba(255, 255, 255, .82);
-      font-size: clamp(14px, 1.4vw, 16px);
-      line-height: 1.45;
-      max-width: 58ch;
-    }
-
-    .sideCard {
-      border: 1px solid rgba(255, 255, 255, .14);
-      background: rgba(255, 255, 255, .06);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .sectionTitle {
+    .sectionTitle{
       font-size: 18px;
-      color: rgba(255, 255, 255, .90);
-      margin: 0 0 8px;
+      color: rgba(255,255,255,.92);
+      margin: 0 0 6px;
       letter-spacing: .2px;
+      font-weight: 800;
     }
-
-    .sectionHint {
-      margin: 0 0 14px;
+    .sectionHint{
+      margin: 0;
       color: var(--muted);
       line-height: 1.5;
       font-size: 14px;
     }
 
-    .statRow {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
+    /* Hero */
+    .hero{ padding: 28px 0 18px; }
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.18fr .82fr;
+      gap: 22px;
+      align-items:stretch;
     }
 
-    .pill {
-      flex: 1 1 130px;
-      padding: 12px 12px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, .07);
-      border: 1px solid rgba(255, 255, 255, .12);
-      transition: transform .16s ease, background .2s ease;
-      min-width: 120px;
+    .heroMedia{
+      position:relative;
+      border-radius: var(--radius);
+      overflow:hidden;
+      min-height: 380px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      box-shadow: var(--shadow);
     }
-
-    .pill:hover {
-      transform: translateY(-2px);
-      background: rgba(255, 255, 255, .10);
+    .heroMedia img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+      transform: scale(1.01);
+      filter: saturate(1.05) contrast(1.02);
     }
-
-    .pill .k {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    .pill .v {
-      font-weight: 750;
-      font-size: 18px;
-      letter-spacing: .2px;
-    }
-
-    /* Buttons */
-    .btn {
-      appearance: none;
-      border: none;
-      cursor: pointer;
-      border-radius: 16px;
-      padding: 14px 16px;
-      font-weight: 700;
-      font-size: 15px;
-      color: rgba(255, 255, 255, .94);
-      background: linear-gradient(135deg, rgba(106, 228, 255, .95), rgba(124, 92, 255, .95));
-      box-shadow: 0 14px 32px rgba(124, 92, 255, .18), 0 10px 26px rgba(106, 228, 255, .10);
-      transition: transform .15s ease, filter .2s ease, box-shadow .2s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+    .heroOverlay{
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.68));
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      padding: 22px 20px;
       gap: 10px;
-      text-decoration: none;
-      width: 100%;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      width:fit-content;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.22);
+      color: rgba(255,255,255,.88);
+      font-size: 13px;
+      backdrop-filter: blur(10px);
     }
 
-    .btn:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.03);
+    /* Явно выделенный заголовок */
+    h1{
+      margin: 0;
+      font-size: clamp(30px, 4.4vw, 52px);
+      line-height: 1.02;
+      letter-spacing: -0.9px;
+      font-weight: 900;
+      text-shadow: 0 14px 40px rgba(0,0,0,.55);
+    }
+    .titleAccent{
+      display:inline-block;
+      padding-bottom: 4px;
+      background:
+        linear-gradient(90deg, rgba(106,228,255,.95), rgba(124,92,255,.95));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .lead{
+      margin: 0;
+      color: rgba(255,255,255,.84);
+      font-size: clamp(14px, 1.5vw, 16px);
+      line-height: 1.5;
+      max-width: 62ch;
     }
 
-    .btn:active {
-      transform: translateY(0px) scale(.99);
+    /* Photo credit under photo */
+    .photoCredit{
+      padding: 10px 14px 14px;
+      font-size: 12px;
+      color: rgba(255,255,255,.72);
+      border-top: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
     }
-
-    .btnGhost {
-      background: rgba(255, 255, 255, .08);
-      border: 1px solid rgba(255, 255, 255, .16);
-      box-shadow: none;
-      font-weight: 650;
-      color: rgba(255, 255, 255, .90);
+    .photoCredit a{
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      color: rgba(255,255,255,.82);
+      transition: opacity .2s ease;
     }
+    .photoCredit a:hover{ opacity:.9; }
 
-    .btnGhost:hover {
-      background: rgba(255, 255, 255, .11);
-    }
-
-    /* Cards */
-    .card {
-      border: 1px solid rgba(255, 255, 255, .14);
-      background: rgba(255, 255, 255, .06);
+    /* Side card */
+    .sideCard{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      overflow: hidden;
+      padding: 18px;
+      display:flex;
+      flex-direction:column;
+      gap: 14px;
+      position:relative;
+      overflow:hidden;
     }
+    .sideCard::after{
+      content:"";
+      position:absolute;
+      inset:-20%;
+      background:
+        radial-gradient(circle at 25% 20%, rgba(106,228,255,.12), transparent 40%),
+        radial-gradient(circle at 75% 35%, rgba(124,92,255,.12), transparent 45%);
+      pointer-events:none;
+      opacity:.9;
+    }
+    .sideCard > *{ position:relative; z-index:1; }
 
-    .cardHeader {
-      padding: 16px 16px 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, .10);
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
+    .statRow{
+      display:flex;
       gap: 12px;
-      flex-wrap: wrap;
+      flex-wrap:wrap;
     }
+    .pill{
+      flex:1 1 160px;
+      padding: 12px 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      transition: transform .16s ease, background .2s ease;
+      min-width: 140px;
+    }
+    .pill:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.10);
+    }
+    .pill .k{ font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .pill .v{ font-weight: 800; font-size: 18px; letter-spacing:.2px; }
+
+    /* Buttons */
+    .btn{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-weight: 800;
+      font-size: 15px;
+      color: rgba(255,255,255,.94);
+      background: linear-gradient(135deg, rgba(106,228,255,.95), rgba(124,92,255,.95));
+      box-shadow: 0 14px 32px rgba(124,92,255,.18), 0 10px 26px rgba(106,228,255,.10);
+      transition: transform .15s ease, filter .2s ease, box-shadow .2s ease;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      width: 100%;
+    }
+    .btn:hover{ transform: translateY(-2px); filter: brightness(1.03); }
+    .btn:active{ transform: translateY(0px) scale(.99); }
+
+    .btnGhost{
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: none;
+      font-weight: 750;
+      color: rgba(255,255,255,.90);
+    }
+    .btnGhost:hover{ background: rgba(255,255,255,.11); }
 
     /* Quiz */
-    .progressText {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .progressBar {
-      width: 220px;
+    .progressText{ font-size: 13px; color: var(--muted); }
+    .progressBar{
+      width: 240px;
       height: 10px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, .10);
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(255,255,255,.10);
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.12);
     }
-
-    .progressBar>div {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, rgba(106, 228, 255, .95), rgba(124, 92, 255, .95));
+    .progressBar > div{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(106,228,255,.95), rgba(124,92,255,.95));
       transition: width .35s ease;
     }
 
-    .question {
-      padding: 16px;
-      font-size: 16px;
-      line-height: 1.45;
-      letter-spacing: -.15px;
+    /* Увеличенные шрифты вопрос/ответ */
+    .question{
+      padding: 18px 16px 10px;
+      font-size: clamp(18px, 2.2vw, 24px);
+      line-height:1.45;
+      letter-spacing: -0.25px;
+      font-weight: 750;
+      position:relative;
+      z-index:1;
     }
 
-    .answers {
-      padding: 0 16px 16px;
-      display: grid;
+    .answers{
+      padding: 0 16px 18px;
+      display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 12px;
+      position:relative;
+      z-index:1;
     }
 
-    .answerBtn {
-      text-align: left;
-      padding: 14px 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, .14);
-      background: rgba(255, 255, 255, .07);
-      color: rgba(255, 255, 255, .92);
-      cursor: pointer;
+    .answerBtn{
+      text-align:left;
+      padding: 16px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.07);
+      color: rgba(255,255,255,.94);
+      cursor:pointer;
       transition: transform .12s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
-      position: relative;
-      overflow: hidden;
-      min-height: 58px;
+      position:relative;
+      overflow:hidden;
+      min-height: 64px;
+      font-size: clamp(16px, 1.7vw, 19px);
+      line-height: 1.35;
+      font-weight: 650;
     }
-
-    .answerBtn::after {
-      content: "";
-      position: absolute;
-      inset: -20%;
-      background: radial-gradient(circle at 30% 20%, rgba(106, 228, 255, .18), transparent 45%),
-        radial-gradient(circle at 70% 60%, rgba(124, 92, 255, .16), transparent 50%);
-      opacity: 0;
+    .answerBtn::after{
+      content:"";
+      position:absolute;
+      inset:-20%;
+      background: radial-gradient(circle at 30% 20%, rgba(106,228,255,.18), transparent 45%),
+                  radial-gradient(circle at 70% 60%, rgba(124,92,255,.16), transparent 50%);
+      opacity:0;
       transition: opacity .25s ease;
     }
-
-    .answerBtn:hover {
+    .answerBtn:hover{
       transform: translateY(-2px);
-      background: rgba(255, 255, 255, .10);
-      border-color: rgba(255, 255, 255, .20);
-      box-shadow: 0 10px 26px rgba(0, 0, 0, .22);
+      background: rgba(255,255,255,.10);
+      border-color: rgba(255,255,255,.22);
+      box-shadow: 0 10px 26px rgba(0,0,0,.22);
+    }
+    .answerBtn:hover::after{ opacity:1; }
+    .answerBtn:active{ transform: translateY(-1px) scale(.995); }
+
+    .answerBtn[disabled]{ cursor:not-allowed; opacity:.93; }
+    .answerBtn.correct{
+      border-color: rgba(25,211,155,.55);
+      background: rgba(25,211,155,.14);
+      box-shadow: 0 12px 30px rgba(25,211,155,.12);
+    }
+    .answerBtn.wrong{
+      border-color: rgba(255,92,122,.55);
+      background: rgba(255,92,122,.12);
+      box-shadow: 0 12px 30px rgba(255,92,122,.10);
     }
 
-    .answerBtn:hover::after {
-      opacity: 1;
-    }
-
-    .answerBtn:active {
-      transform: translateY(-1px) scale(.995);
-    }
-
-    .answerBtn[disabled] {
-      cursor: not-allowed;
-      opacity: .92;
-    }
-
-    .answerBtn.correct {
-      border-color: rgba(25, 211, 155, .55);
-      background: rgba(25, 211, 155, .14);
-      box-shadow: 0 12px 30px rgba(25, 211, 155, .12);
-    }
-
-    .answerBtn.wrong {
-      border-color: rgba(255, 92, 122, .55);
-      background: rgba(255, 92, 122, .12);
-      box-shadow: 0 12px 30px rgba(255, 92, 122, .10);
-    }
-
-    .cardFooter {
+    .cardFooter{
       padding: 14px 16px 16px;
-      border-top: 1px solid rgba(255, 255, 255, .10);
-      display: flex;
+      border-top: 1px solid rgba(255,255,255,.10);
+      display:flex;
       gap: 10px;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      position:relative;
+      z-index:1;
     }
-
-    .note {
+    .note{
       color: var(--muted);
       font-size: 13px;
-      line-height: 1.4;
+      line-height:1.4;
     }
-
-    .footerBtns {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+    .footerBtns{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
       width: 100%;
-      justify-content: flex-end;
+      justify-content:flex-end;
     }
-
-    .footerBtns .btn {
-      width: auto;
-      min-width: 180px;
-    }
+    .footerBtns .btn{ width:auto; min-width: 180px; }
 
     /* Result */
-    .resultBox {
+    .resultBox{
       padding: 18px 16px;
-      display: flex;
+      display:flex;
       gap: 14px;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      position:relative;
+      z-index:1;
     }
-
-    .scoreBig {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+    .scoreBig{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
     }
-
-    .scoreBig .num {
-      font-size: clamp(26px, 4vw, 40px);
-      font-weight: 850;
-      letter-spacing: -.6px;
+    .scoreBig .num{
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 900;
+      letter-spacing: -0.8px;
     }
-
-    .scoreBig .sub {
+    .scoreBig .sub{
       color: var(--muted);
       font-size: 14px;
-      line-height: 1.45;
+      line-height:1.45;
     }
 
     /* Toast */
-    .toast {
+    .toast{
       position: fixed;
       left: 50%;
       bottom: 20px;
       transform: translateX(-50%) translateY(20px);
       padding: 10px 12px;
       border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, .16);
-      background: rgba(0, 0, 0, .36);
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.36);
       backdrop-filter: blur(12px);
-      color: rgba(255, 255, 255, .92);
+      color: rgba(255,255,255,.92);
       font-size: 13px;
-      opacity: 0;
-      pointer-events: none;
+      opacity:0;
+      pointer-events:none;
       transition: opacity .25s ease, transform .25s ease;
       z-index: 999;
-      display: flex;
-      align-items: center;
+      display:flex;
+      align-items:center;
       gap: 8px;
-      box-shadow: 0 14px 40px rgba(0, 0, 0, .35);
+      box-shadow: 0 14px 40px rgba(0,0,0,.35);
+    }
+    .toast.show{ opacity:1; transform: translateX(-50%) translateY(0); }
+
+    /* Footer */
+    footer{
+      padding: 26px 0 34px;
+      color: rgba(255,255,255,.72);
+      font-size: 13px;
+      text-align:center;
+    }
+    .footerLine{
+      display:inline-block;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      box-shadow: 0 10px 30px rgba(0,0,0,.20);
     }
 
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
+    .hidden{ display:none !important; }
+
+    @media (max-width: 860px){
+      .heroGrid{ grid-template-columns: 1fr; }
+      .heroMedia{ min-height: 320px; }
+      .progressBar{ width: 100%; }
+      .answers{ grid-template-columns: 1fr; }
+      .footerBtns{ justify-content:stretch; }
+      .footerBtns .btn{ width:100%; }
+      .navlinks{ gap:10px; }
     }
 
-    .hidden {
-      display: none !important;
-    }
-
-    @media (max-width: 860px) {
-      .heroGrid {
-        grid-template-columns: 1fr;
-      }
-
-      .heroCard {
-        min-height: 340px;
-      }
-
-      .progressBar {
-        width: 100%;
-      }
-
-      .answers {
-        grid-template-columns: 1fr;
-      }
-
-      .footerBtns {
-        justify-content: stretch;
-      }
-
-      .footerBtns .btn {
-        width: 100%;
-      }
-
-      .navlinks {
-        gap: 10px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        transition: none !important;
-        animation: none !important;
-      }
-
-      html {
-        scroll-behavior: auto;
-      }
+    @media (prefers-reduced-motion: reduce){
+      * { transition: none !important; animation: none !important; }
+      html { scroll-behavior: auto; }
     }
   </style>
 </head>
@@ -549,37 +542,45 @@
   </header>
 
   <main id="top" class="container">
+    <!-- HERO -->
     <section class="hero" aria-label="Обложка">
       <div class="heroGrid">
-        <div class="heroCard">
-          <div class="heroImg" role="img" aria-label="Горбатый кит под водой"></div>
-          <div class="heroContent">
-            <span class="badge">15 вопросов · 4 варианта · 1 верный</span>
-            <h1>Тест: «Горбатый кит и гидроэнергетика»</h1>
+        <div class="heroMedia" aria-label="Фото горбатого кита">
+          <!-- Wikimedia Commons image via Special:FilePath (works like “from Wikipedia”) -->
+          <img
+            src="https://commons.wikimedia.org/wiki/Special:FilePath/025%20Humpback%20whale%20at%20Disko%20Bay%20(Greenland)%20Photo%20by%20Giles%20Laurent.jpg?width=1800"
+            alt="Горбатый кит: хвост над водой"
+            loading="eager"
+            referrerpolicy="no-referrer"
+          />
+          <div class="heroOverlay">
+            <div class="badge">15 вопросов · 4 варианта · 1 верный</div>
+            <h1><span class="titleAccent">Тест</span>: «Горбатый кит и гидроэнергетика»</h1>
             <p class="lead">
-              Узнай, как идеи из природы помогают инженерам улучшать лопасти и управление потоком воды.
-              Отвечай по порядку: один вопрос — один выбор.
+              Вопросы про КПД, кавитацию, турбулентность и биомиметику — по одному вопросу за раз.
             </p>
+          </div>
+
+          <!-- Link + copyright under photo -->
+          <div class="photoCredit">
+            Фото: <a href="https://commons.wikimedia.org/wiki/File:025_Humpback_whale_at_Disko_Bay_(Greenland)_Photo_by_Giles_Laurent.jpg" target="_blank" rel="noopener">© Giles Laurent</a>,
+            <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>
           </div>
         </div>
 
-        <aside class="sideCard" aria-label="Краткая информация">
+        <aside class="sideCard" aria-label="Инструкция">
           <div>
-            <h2 class="sectionTitle" style="margin:0 0 6px;">Как проходить</h2>
-            <p class="sectionHint" style="margin:0;">
-              Нажми «Начать тест» — появится первый вопрос. Варианты ответов перемешиваются при каждом новом
-              прохождении.
+            <div class="sectionTitle">Как проходить</div>
+            <p class="sectionHint">
+              Нажмите «Начать тест» — появится первый вопрос. Варианты ответов перемешиваются при каждом новом прохождении.
             </p>
           </div>
 
+          <!-- Убрали блок “Показываем без A/B/C/D” полностью -->
           <div class="statRow" aria-label="Статистика">
             <div class="pill">
               <div class="k">Вопросов</div>
               <div class="v" id="statQ">15</div>
-            </div>
-            <div class="pill">
-              <div class="k">Показываем</div>
-              <div class="v">без A/B/C/D</div>
             </div>
             <div class="pill">
               <div class="k">Формат</div>
@@ -594,26 +595,25 @@
       </div>
     </section>
 
+    <!-- START -->
     <section id="start" aria-label="Старт">
       <div class="card">
         <div class="cardHeader">
           <div>
             <div class="sectionTitle">Готовы начать?</div>
-            <div class="sectionHint">Выберите один вариант ответа — следующий вопрос появится автоматически.</div>
+            <p class="sectionHint">Выберите один вариант — следующий вопрос появится автоматически.</p>
           </div>
           <div class="progressText" id="attemptText">Попытка: 1</div>
         </div>
-        <div style="padding:16px;">
+        <div style="padding:16px; position:relative; z-index:1;">
           <button class="btn" id="startBtn" type="button">
             Начать тест <span aria-hidden="true">🟦</span>
           </button>
-          <div class="sectionHint" style="margin:12px 0 0;">
-            Подсказка для честности: алгоритм слегка снижает шанс, что «самый длинный вариант» окажется верным.
-          </div>
         </div>
       </div>
     </section>
 
+    <!-- QUIZ -->
     <section id="quiz" aria-label="Тест">
       <div class="card" id="quizCard">
         <div class="cardHeader">
@@ -641,12 +641,13 @@
       </div>
     </section>
 
+    <!-- RESULT -->
     <section id="result" aria-label="Результат">
       <div class="card">
         <div class="cardHeader">
           <div>
             <div class="sectionTitle">Итог</div>
-            <div class="sectionHint" style="margin:0;">После 15-го ответа покажем результат и дадим пройти заново.</div>
+            <p class="sectionHint">После 15-го ответа покажем результат и дадим пройти тест заново.</p>
           </div>
         </div>
 
@@ -656,178 +657,186 @@
             <div class="sub" id="scoreSub">Нажмите «Начать тест», чтобы пройти опрос.</div>
           </div>
 
-          <div style="display:flex; gap:10px; flex-wrap:wrap; width:min(420px,100%); justify-content:flex-end;">
+          <div style="display:flex; gap:10px; flex-wrap:wrap; width:min(420px,100%); justify-content:flex-end; position:relative; z-index:1;">
             <button class="btn btnGhost" id="restartBtn" type="button">Пройти ещё раз</button>
             <a class="btn" href="#top">На обложку ↑</a>
           </div>
         </div>
       </div>
     </section>
+
+    <footer aria-label="Подпись">
+      <span class="footerLine">
+        Команда "КапибаРита". Подготовка к соревнованиям "Энергия в действии". 2026.
+      </span>
+    </footer>
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
     // ==========================
-    // Настройки "анти-угадайки"
+    // Настройки "анти-угадайки" (по длине)
+    // Можно выключить, поставив false
     // ==========================
-    const ANTI_LONGEST_BIAS = true;   // снижает шанс "самый длинный ответ = правильный"
-    const ANTI_LONGEST_PROB = 0.85;   // вероятность пере-шаффла, если правильный оказался самым длинным
-    const ANTI_LONGEST_TRIES = 12;    // максимум попыток пере-шаффла на вопрос
+    const ANTI_LONGEST_BIAS = true;
+    const ANTI_LONGEST_PROB = 0.85;
+    const ANTI_LONGEST_TRIES = 12;
 
     // ==========================
-    // Данные теста (НОВЫЕ)
+    // НОВЫЕ вопросы/ответы
+    // (буквы A/B/C/D в интерфейсе НЕ показываем)
     // ==========================
     const QUESTIONS = [
       {
-        q: "Как точнее всего называется подход “берём идею у природы и переносим в технику”?",
+        q: "1) КПД турбины (упрощённо) — это…",
         options: [
-          { id: "A", text: "Биоинженерия: изменяем живые организмы под задачу" },
-          { id: "B", text: "Биомиметика: переносим природный принцип в конструкцию" },
-          { id: "C", text: "Бионика: создаём робота, похожего на живое существо" },
-          { id: "D", text: "Эволюция: устройство само улучшается при эксплуатации" }
+          { id: "A", text: "Расход воды, делённый на обороты" },
+          { id: "B", text: "Полезная мощность, делённая на мощность потока" },
+          { id: "C", text: "Разность скоростей воды до и после" },
+          { id: "D", text: "Сумма сил на лопастях за секунду" }
         ],
         correctId: "B"
       },
       {
-        q: "Какой элемент плавника горбатого кита чаще всего копируют в лопастях?",
+        q: "2) Какое утверждение про турбулентность и шум НЕ корректно?",
         options: [
-          { id: "A", text: "Пилообразный край на задней кромке плавника" },
-          { id: "B", text: "Слой “кожи”, снижающий трение за счёт слизи" },
-          { id: "C", text: "Бугорки на передней кромке, формирующие вихревую структуру" },
-          { id: "D", text: "Изогнутый кончик плавника, работающий как руль" }
+          { id: "A", text: "Турбулентность даёт колебания давления и шум" },
+          { id: "B", text: "Турбулентность может усиливать вибрации агрегата" },
+          { id: "C", text: "Турбулентность всегда снижает шум в канале" },
+          { id: "D", text: "Турбулентность усложняет режимы и повышает потери" }
         ],
         correctId: "C"
       },
       {
-        q: "Почему инженеры уделяют внимание именно передней кромке профиля?",
+        q: "3) Кавитация — это…",
         options: [
-          { id: "A", text: "Там крепёж лопасти, поэтому меняется только прочность" },
-          { id: "B", text: "Там всегда возникает кавитация, форма ничего не меняет" },
-          { id: "C", text: "Там давление всегда выше, значит это не важно для потока" },
-          { id: "D", text: "Там задаётся “старт” обтекания и устойчивость пограничного слоя" }
-        ],
-        correctId: "D"
-      },
-      {
-        q: "Какой механизм ближе всего к реальному действию туберкул?",
-        options: [
-          { id: "A", text: "Создаются продольные вихри, помогающие потоку “держаться”" },
-          { id: "B", text: "Поток становится ламинарным и почти безвихревым повсюду" },
-          { id: "C", text: "Полезная сила растёт только из-за увеличения площади лопасти" },
-          { id: "D", text: "Плотность воды у поверхности уменьшается из-за формы" }
+          { id: "A", text: "Паровые пузырьки: возникли и схлопнулись" },
+          { id: "B", text: "Воздушные пузырьки, попавшие из атмосферы" },
+          { id: "C", text: "Любые вихри за лопастью в потоке" },
+          { id: "D", text: "Нагрев воды из-за трения о металл" }
         ],
         correctId: "A"
       },
       {
-        q: "Когда туберкулы чаще дают заметную пользу для устойчивости работы?",
+        q: "4) Что НЕ относится к биомиметике?",
         options: [
-          { id: "A", text: "При идеально ровном потоке и малом угле атаки" },
-          { id: "B", text: "При режимах близких к срыву и меняющемся потоке" },
-          { id: "C", text: "При нулевой скорости потока, когда нет обтекания" },
-          { id: "D", text: "При кипении воды у лопасти из-за высокой температуры" }
-        ],
-        correctId: "B"
-      },
-      {
-        q: "Что наиболее точно означает “срыв потока” на лопасти/профиле?",
-        options: [
-          { id: "A", text: "Вода полностью останавливается перед лопастью" },
-          { id: "B", text: "Появляются пузырьки воздуха, и поэтому падает КПД" },
-          { id: "C", text: "Поток отрывается от поверхности, растут потери и вибрации" },
-          { id: "D", text: "Поток становится строго прямолинейным без вихрей" }
-        ],
-        correctId: "C"
-      },
-      {
-        q: "Какое изменение поведения чаще ожидают от туберкул около срыва?",
-        options: [
-          { id: "A", text: "Срыв наступает раньше, но становится менее заметным" },
-          { id: "B", text: "Срыв не меняется, меняется только шум от струи" },
-          { id: "C", text: "Срыв исчезает полностью при любом угле атаки" },
-          { id: "D", text: "Срыв откладывается, а ухудшение характеристик становится плавнее" }
+          { id: "A", text: "Идея из природы, проверенная экспериментом" },
+          { id: "B", text: "Аналог формы, выбранный по физике потока" },
+          { id: "C", text: "Перенос принципа в инженерную конструкцию" },
+          { id: "D", text: "Изменение генов животных под задачу формы" }
         ],
         correctId: "D"
       },
       {
-        q: "Что не является надёжным “обещанием” биомиметической формы?",
+        q: "5) Почему передняя кромка профиля так важна?",
         options: [
-          { id: "A", text: "Рост КПД во всех режимах без каких-либо компромиссов" },
-          { id: "B", text: "Возможное снижение вибраций в некоторых режимах работы" },
-          { id: "C", text: "Возможная устойчивость к колебаниям потока и угла атаки" },
-          { id: "D", text: "Возможное смягчение перехода к срыву потока" }
+          { id: "A", text: "Там всегда максимум давления, форма не важна" },
+          { id: "B", text: "Там только крепёж, важнее прочность детали" },
+          { id: "C", text: "Там задаётся начало обтекания профиля" },
+          { id: "D", text: "Там формируется струя после задней кромки" }
+        ],
+        correctId: "C"
+      },
+      {
+        q: "6) “Срыв потока” — это когда…",
+        options: [
+          { id: "A", text: "Поток стал ламинарным по всей поверхности" },
+          { id: "B", text: "Поток оторвался, выросли потери и дрожь" },
+          { id: "C", text: "Поток остановился перед кромкой полностью" },
+          { id: "D", text: "В потоке появились пузырьки воздуха" }
+        ],
+        correctId: "B"
+      },
+      {
+        q: "7) Почему туберкулы — “пассивное” управление потоком?",
+        options: [
+          { id: "A", text: "Датчики меняют форму кромки в реальном времени" },
+          { id: "B", text: "Подогрев воды у кромки стабилизирует режим" },
+          { id: "C", text: "Приводы двигают кромку по команде контроллера" },
+          { id: "D", text: "Форма сама влияет на поток без приводов" }
+        ],
+        correctId: "D"
+      },
+      {
+        q: "8) Реальный механизм туберкул ближе всего к идее…",
+        options: [
+          { id: "A", text: "Продольные вихри подпитывают пограничный слой" },
+          { id: "B", text: "Полное исчезновение вихрей и ламинаризация" },
+          { id: "C", text: "Рост силы только из-за большей площади" },
+          { id: "D", text: "Снижение плотности воды возле поверхности" }
         ],
         correctId: "A"
       },
       {
-        q: "Какое определение кавитации наиболее корректно (по смыслу)?",
+        q: "9) Где эффект туберкул проявится вероятнее всего?",
         options: [
-          { id: "A", text: "Любые пузырьки воздуха, появившиеся из-за течения" },
-          { id: "B", text: "Любая турбулентность, возникающая за лопастью" },
-          { id: "C", text: "Паровые пузырьки из-за падения давления и их схлопывание" },
-          { id: "D", text: "Растворение газов в воде при нагреве и охлаждении" }
+          { id: "A", text: "Ровный поток и всегда малый угол атаки" },
+          { id: "B", text: "Нулевой расход воды и неподвижная лопасть" },
+          { id: "C", text: "Переменный поток, режимы близки к срыву" },
+          { id: "D", text: "Кипящая вода у кромки из-за нагрева" }
         ],
         correctId: "C"
       },
       {
-        q: "Почему туберкулы называют “пассивным управлением потоком”?",
+        q: "10) Какой эффект около срыва НЕ является типичным?",
         options: [
-          { id: "A", text: "Они требуют датчиков, которые следят за давлением воды" },
-          { id: "B", text: "Геометрия работает сама, без приводов и активных систем" },
-          { id: "C", text: "Лопасть постоянно меняет форму во время вращения" },
-          { id: "D", text: "Нужен подогрев воды рядом с передней кромкой" }
+          { id: "A", text: "Срыв наступает позже и мягче" },
+          { id: "B", text: "Срыв исчезает при любом угле атаки" },
+          { id: "C", text: "Поток держится дольше на части профиля" },
+          { id: "D", text: "Возникают устойчивые продольные вихри" }
         ],
         correctId: "B"
       },
       {
-        q: "Какой эксперимент наиболее корректен для сравнения двух лопастей?",
+        q: "11) Какой способ сравнения лопастей самый некорректный?",
         options: [
-          { id: "A", text: "Сравнить в разных потоках, но одинаковым временем теста" },
-          { id: "B", text: "Сравнить “на глаз”, если кажется, что крутится быстрее" },
-          { id: "C", text: "Сравнить в воде и в воздухе, чтобы было “контрастнее”" },
-          { id: "D", text: "Одинаковые условия, серия повторов, измерение оборотов/мощности" }
-        ],
-        correctId: "D"
-      },
-      {
-        q: "Почему инженеры осторожны при внедрении туберкул в серию?",
-        options: [
-          { id: "A", text: "Эффект зависит от размеров и режима, важны производство и загрязнение" },
-          { id: "B", text: "Это запрещено стандартами и всегда не проходит сертификацию" },
-          { id: "C", text: "Туберкулы работают только на гибких плавниках, не на металле" },
-          { id: "D", text: "Они обязательно усиливают кавитацию в любом режиме" }
+          { id: "A", text: "Разные потоки, один запуск, оценка “на глаз”" },
+          { id: "B", text: "Один поток, повторы, измеряем обороты и ток" },
+          { id: "C", text: "Один угол, одна нагрузка, делаем серию тестов" },
+          { id: "D", text: "Один профиль, меняем только переднюю кромку" }
         ],
         correctId: "A"
       },
       {
-        q: "КПД турбины (упрощённо) — это…",
+        q: "12) Почему внедрение туберкул в технику не всегда простое?",
         options: [
-          { id: "A", text: "Разность входной и выходной скорости потока воды" },
-          { id: "B", text: "Отношение полезной мощности к мощности потока воды на входе" },
-          { id: "C", text: "Сумма сил на лопастях, делённая на площадь лопасти" },
-          { id: "D", text: "Отношение расхода воды к частоте вращения турбины" }
+          { id: "A", text: "Потому что это запрещено стандартами везде" },
+          { id: "B", text: "Потому что это работает только на коже кита" },
+          { id: "C", text: "Потому что это всегда усиливает кавитацию" },
+          { id: "D", text: "Потому что важны режим, прочность и изготовление" }
         ],
-        correctId: "B"
+        correctId: "D"
       },
       {
-        q: "Почему борьба со срывом потока может повышать эффективность?",
+        q: "13) Почему срыв потока может ухудшать эффективность?",
         options: [
-          { id: "A", text: "Срыв уменьшает сопротивление, поэтому помогает вращению" },
-          { id: "B", text: "Срыв нужен, чтобы увеличить вихри и поднять мощность" },
-          { id: "C", text: "Отрыв повышает потери и сопротивление, снижая полезную силу" },
-          { id: "D", text: "Отрыв влияет только на шум, а на КПД почти не влияет" }
+          { id: "A", text: "Срыв всегда повышает КПД за счёт вихрей" },
+          { id: "B", text: "Срыв влияет лишь на звук, не на энергию" },
+          { id: "C", text: "Срыв увеличивает потери и снижает полезную силу" },
+          { id: "D", text: "Срыв не зависит от угла атаки и расхода" }
         ],
         correctId: "C"
       },
       {
-        q: "Что вернее про турбулентность и шум в гидромашинах?",
+        q: "14) Что чаще всего “ломает” ответы в тестах на внимательность?",
         options: [
-          { id: "A", text: "Турбулентность всегда повышает КПД и убирает вибрации" },
-          { id: "B", text: "Турбулентность не связана с шумом, важна только кавитация" },
-          { id: "C", text: "Если есть турбулентность, то срыв потока невозможен" },
-          { id: "D", text: "Турбулентность даёт колебания давления, усиливая шум и вибрации" }
+          { id: "A", text: "Пропуск слов «НЕ/наименее/наиболее» в вопросе" },
+          { id: "B", text: "Путаница, где у профиля передняя кромка" },
+          { id: "C", text: "Смешивание терминов «кавитация» и «турбулентность»" },
+          { id: "D", text: "Подмена КПД “скоростью”, а не отношением мощностей" }
         ],
-        correctId: "D"
+        correctId: "A"
+      },
+      {
+        q: "15) Что нельзя обещать заранее для туберкул “во всех случаях”?",
+        options: [
+          { id: "A", text: "Снижение вибраций в отдельных режимах" },
+          { id: "B", text: "Рост КПД во всех режимах без компромиссов" },
+          { id: "C", text: "Сглаживание перехода к срыву потока" },
+          { id: "D", text: "Устойчивость к колебаниям скорости потока" }
+        ],
+        correctId: "B"
       }
     ];
 
@@ -836,34 +845,34 @@
     // ==========================
     const $ = (sel) => document.querySelector(sel);
 
-    function shuffle(arr) {
+    function shuffle(arr){
       const a = arr.slice();
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+      for(let i=a.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
         [a[i], a[j]] = [a[j], a[i]];
       }
       return a;
     }
 
-    function isCorrectLongest(q) {
+    function isCorrectLongest(q){
       const correct = q.options.find(o => o.id === q.correctId);
-      if (!correct) return false;
+      if(!correct) return false;
       const maxLen = Math.max(...q.options.map(o => (o.text || "").length));
       return (correct.text || "").length === maxLen;
     }
 
-    function shuffleWithAntiLongest(question) {
+    function shuffleWithAntiLongest(question){
       let out = {
         q: question.q,
         correctId: question.correctId,
         options: shuffle(question.options)
       };
 
-      if (!ANTI_LONGEST_BIAS) return out;
+      if(!ANTI_LONGEST_BIAS) return out;
 
       let tries = 0;
-      while (tries < ANTI_LONGEST_TRIES) {
-        if (isCorrectLongest(out) && Math.random() < ANTI_LONGEST_PROB) {
+      while(tries < ANTI_LONGEST_TRIES){
+        if(isCorrectLongest(out) && Math.random() < ANTI_LONGEST_PROB){
           out.options = shuffle(out.options);
           tries++;
           continue;
@@ -873,13 +882,13 @@
       return out;
     }
 
-    function showToast(text, kind) {
+    function showToast(text, kind){
       const toast = $("#toast");
       toast.textContent = text;
       toast.style.borderColor = kind === "ok" ? "rgba(25,211,155,.35)" : "rgba(255,92,122,.35)";
       toast.classList.add("show");
       clearTimeout(showToast._t);
-      showToast._t = setTimeout(() => toast.classList.remove("show"), 900);
+      showToast._t = setTimeout(()=> toast.classList.remove("show"), 900);
     }
 
     // ==========================
@@ -891,8 +900,8 @@
     let score = 0;
     let locked = false;
 
-    // для гарантии "в новом прохождении хотя бы один вопрос меняется"
-    let prevOrders = null; // массив строк, по вопросу: "A|B|C|D" в текущем порядке
+    // Чтобы гарантировать: в новом прохождении хотя бы один вопрос поменял порядок вариантов
+    let prevOrders = null;
 
     // ==========================
     // UI refs
@@ -911,17 +920,15 @@
     // ==========================
     // Core
     // ==========================
-    function buildRunQuestions() {
+    function buildRunQuestions(){
       const built = QUESTIONS.map(q => shuffleWithAntiLongest(q));
       const orders = built.map(b => b.options.map(o => o.id).join("|"));
 
-      if (prevOrders && orders.every((o, i) => o === prevOrders[i])) {
-        // крайне маловероятно, но на всякий случай принудительно "перекинем" 1-й вопрос
+      // если вдруг порядок полностью совпал (крайне редко) — принудительно меняем первый вопрос
+      if(prevOrders && orders.every((o,i)=> o === prevOrders[i])){
         const b0 = built[0];
-        if (b0.options.length >= 2) {
-          const tmp = b0.options[0];
-          b0.options[0] = b0.options[1];
-          b0.options[1] = tmp;
+        if(b0.options.length >= 2){
+          [b0.options[0], b0.options[1]] = [b0.options[1], b0.options[0]];
           orders[0] = b0.options.map(o => o.id).join("|");
         }
       }
@@ -930,7 +937,7 @@
       return built;
     }
 
-    function newAttempt() {
+    function newAttempt(){
       runQuestions = buildRunQuestions();
       idx = 0;
       score = 0;
@@ -943,7 +950,7 @@
       renderQuestion();
     }
 
-    function renderQuestion() {
+    function renderQuestion(){
       const total = runQuestions.length;
       const q = runQuestions[idx];
 
@@ -957,7 +964,7 @@
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "answerBtn";
-        btn.textContent = opt.text; // без A/B/C/D
+        btn.textContent = opt.text; // буквы не показываем
         btn.addEventListener("click", () => choose(opt.id, btn));
         answersWrap.appendChild(btn);
       });
@@ -966,8 +973,8 @@
       locked = false;
     }
 
-    function choose(chosenId, chosenBtn) {
-      if (locked) return;
+    function choose(chosenId, chosenBtn){
+      if(locked) return;
       locked = true;
 
       const q = runQuestions[idx];
@@ -976,24 +983,22 @@
       const buttons = [...answersWrap.querySelectorAll("button")];
       buttons.forEach(b => b.disabled = true);
 
-      if (isCorrect) {
+      if(isCorrect){
         score++;
         chosenBtn.classList.add("correct");
         showToast("Верно ✓", "ok");
       } else {
         chosenBtn.classList.add("wrong");
         const correctOpt = q.options.find(o => o.id === q.correctId);
-        // подсветим правильный (по совпадению текста — безопасно, т.к. тексты уникальны внутри вопроса)
         const correctBtn = buttons.find(b => b.textContent === correctOpt?.text);
-        if (correctBtn) correctBtn.classList.add("correct");
+        if(correctBtn) correctBtn.classList.add("correct");
         showToast("Неверно ✕", "bad");
       }
 
-      const total = runQuestions.length;
-      progressFill.style.width = `${((idx + 1) / total) * 100}%`;
+      progressFill.style.width = `${((idx + 1) / runQuestions.length) * 100}%`;
 
       setTimeout(() => {
-        if (idx < total - 1) {
+        if(idx < runQuestions.length - 1){
           idx++;
           renderQuestion();
           document.querySelector("#quiz").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1003,7 +1008,7 @@
       }, 650);
     }
 
-    function finish() {
+    function finish(){
       questionText.textContent = "Тест завершён! 🎉";
       answersWrap.innerHTML = "";
       noteText.textContent = "Результат показан ниже. Можно пройти ещё раз — варианты ответов снова перемешаются.";
@@ -1019,7 +1024,7 @@
     // Events
     // ==========================
     startBtn.addEventListener("click", () => {
-      if (idx === -1) {
+      if(idx === -1){
         newAttempt();
       } else {
         attempt++;
@@ -1041,6 +1046,5 @@
     attemptText.textContent = `Попытка: ${attempt}`;
   </script>
 </body>
-
 </html>
 ```
