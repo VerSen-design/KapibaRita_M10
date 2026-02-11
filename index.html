@@ -1,878 +1,538 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Тест: Трансформаторы и линии электропередач</title>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Тест: Шлюзы и судоподъёмники</title>
   <style>
     :root{
-      /* ✅ Новая цветовая гамма (зелёная) */
-      --bg1:#06140b;      /* deep forest */
-      --bg2:#0a2313;      /* dark green */
+      --bg0:#061428;
+      --bg1:#071b36;
+      --card: rgba(255,255,255,.07);
+      --card2: rgba(255,255,255,.09);
       --stroke: rgba(255,255,255,.12);
-
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.68);
-
-      --ok:#6dffc9;       /* mint */
-      --bad:#ff5b7f;      /* rose */
-
-      --accent:#7dff7a;   /* bright green */
-      --accent2:#19b86a;  /* emerald */
-
+      --stroke2: rgba(255,255,255,.18);
+      --text:#eaf2ff;
+      --muted: rgba(234,242,255,.75);
+      --muted2: rgba(234,242,255,.55);
       --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --accent:#4ea3ff;
+      --accent2:#2d6bff;
+      --good:#4ee2a5;
+      --bad:#ff6b6b;
       --radius: 22px;
-
-      --headerH: 64px;
     }
 
-    * { box-sizing: border-box; }
-    html{
-      scroll-behavior: smooth;
-      scroll-padding-top: var(--headerH);
-    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
-      color: var(--text);
-
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      color:var(--text);
       background:
-        radial-gradient(900px 520px at 16% 12%, rgba(125,255,122,.16), transparent 60%),
-        radial-gradient(900px 560px at 84% 18%, rgba(25,184,106,.14), transparent 58%),
-        radial-gradient(900px 560px at 52% 86%, rgba(109,255,201,.10), transparent 60%),
-        linear-gradient(160deg, var(--bg1), var(--bg2));
-
+        radial-gradient(1000px 500px at 15% 5%, rgba(78,163,255,.18), transparent 55%),
+        radial-gradient(900px 600px at 85% 15%, rgba(45,107,255,.16), transparent 60%),
+        radial-gradient(900px 700px at 50% 95%, rgba(78,163,255,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
       min-height:100vh;
-      overflow-x:hidden;
     }
 
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.14'/%3E%3C/svg%3E");
-      mix-blend-mode:overlay;
-      opacity:.16;
-    }
+    a{color:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:18px 14px 42px}
 
-    a { color: inherit; text-decoration: none; }
-    .container{ width:min(1100px, 92vw); margin: 0 auto; }
-
-    /* Header (hidden on mobile) */
-    header{
-      position:sticky;
-      top:0;
-      z-index:50;
+    /* Compact header (hidden on mobile to avoid overlap) */
+    .topbar{
+      position:sticky; top:0; z-index:50;
       backdrop-filter: blur(14px);
-      background: rgba(6,20,11,.44);
-      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(6,20,40,.35);
+      border-bottom:1px solid rgba(255,255,255,.10);
     }
-    .nav{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding: 10px 0;
-      gap: 12px;
-      min-height: var(--headerH);
+    .topbar-inner{
+      max-width:1100px;margin:0 auto;padding:10px 14px;
+      display:flex;align-items:center;justify-content:space-between;gap:14px;
     }
     .brand{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-weight:950;
-      letter-spacing:.2px;
+      display:flex;align-items:center;gap:10px;
+      font-weight:800; letter-spacing:.2px;
       white-space:nowrap;
     }
-    .brand .dot{
-      width:10px;height:10px;border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, var(--accent), var(--accent2));
-      box-shadow: 0 0 18px rgba(25,184,106,.30);
-      flex: 0 0 auto;
+    .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: radial-gradient(circle at 30% 30%, #bfe2ff, var(--accent));
+      box-shadow: 0 0 18px rgba(78,163,255,.55);
+      flex:0 0 auto;
     }
-    .brand span{
-      background: linear-gradient(90deg, rgba(255,255,255,.96), rgba(255,255,255,.78));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+    .nav{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+      font-size:14px; color:var(--muted);
     }
-    .navlinks{
-      display:flex;
-      gap:10px;
-      font-size: 14px;
-      color: var(--muted);
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    .navlinks a{
+    .nav a{
+      text-decoration:none;
       padding:8px 10px;
-      border-radius: 12px;
-      transition: transform .15s ease, background .2s ease, color .2s ease;
+      border-radius:999px;
+      border:1px solid transparent;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
     }
-    .navlinks a:hover{
-      background: rgba(255,255,255,.06);
-      color: var(--text);
+    .nav a:hover{
       transform: translateY(-1px);
+      background: rgba(255,255,255,.06);
+      border-color: rgba(255,255,255,.12);
+      color:var(--text);
     }
 
-    section{ padding: 18px 0 34px; }
-
-    /* Cards */
-    .card{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      position:relative;
-    }
-    .card::after{
-      content:"";
-      position:absolute;
-      inset:-1px;
-      border-radius: inherit;
-      pointer-events:none;
-      opacity:.35;
-      background:
-        radial-gradient(520px 280px at 18% 8%, rgba(125,255,122,.12), transparent 60%),
-        radial-gradient(520px 280px at 82% 18%, rgba(25,184,106,.10), transparent 60%);
-      mix-blend-mode: screen;
-    }
-    .cardHeader{
-      padding: 16px 16px 12px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap: 12px;
-      flex-wrap:wrap;
-      position:relative;
-      z-index:1;
+    @media (max-width: 760px){
+      .topbar{display:none;}
+      .wrap{padding-top:14px;}
     }
 
-    .sectionTitle{
-      font-size: 18px;
-      color: rgba(255,255,255,.92);
-      margin: 0 0 6px;
-      letter-spacing: .2px;
-      font-weight: 950;
-    }
-    .sectionHint{
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.5;
-      font-size: 14px;
-    }
-
-    /* Hero */
-    .hero{ padding: 28px 0 18px; }
-    .heroGrid{
+    .grid{
       display:grid;
-      grid-template-columns: 1.18fr .82fr;
-      gap: 22px;
+      grid-template-columns: 1.35fr .65fr;
+      gap:16px;
       align-items:stretch;
+      margin-top:16px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns: 1fr; }
     }
 
-    .heroMedia{
-      position:relative;
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      border:1px solid var(--stroke);
       border-radius: var(--radius);
-      overflow:hidden;
-      aspect-ratio: 2 / 1;
-      min-height: 320px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
       box-shadow: var(--shadow);
     }
-    .heroMedia img{
-      width:100%;
-      height:100%;
-      object-fit: cover;
-      object-position: center;
-      display:block;
-      transform: scale(1.01);
-      filter: saturate(1.06) contrast(1.08);
+
+    .hero{
+      overflow:hidden;
+      position:relative;
+      min-height: 330px;
     }
-    .heroOverlay{
-      position:absolute;
-      inset:0;
-      background: linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.86));
+    @media (max-width: 760px){
+      .hero{min-height: 250px;}
+    }
+    .hero-img{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:cover;
+      transform: scale(1.03);
+      filter: saturate(1.05) contrast(1.05);
+    }
+    .hero::after{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(900px 380px at 20% 25%, rgba(78,163,255,.22), transparent 58%),
+        linear-gradient(120deg, rgba(0,0,0,.55), rgba(0,0,0,.12) 58%, rgba(0,0,0,.35));
+      pointer-events:none;
+    }
+    .hero-content{
+      position:relative;
+      padding:22px;
       display:flex;
       flex-direction:column;
       justify-content:flex-end;
-      padding: 22px 20px;
-      gap: 10px;
+      gap:10px;
+      min-height:inherit;
     }
     .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      width:fit-content;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.22);
-      color: rgba(255,255,255,.86);
-      font-size: 13px;
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;
+      width:max-content;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      color: rgba(234,242,255,.92);
+      font-size:13px;
       backdrop-filter: blur(10px);
     }
+    .title{
+      margin:0;
+      font-size: clamp(28px, 3.2vw, 44px);
+      line-height:1.06;
+      letter-spacing:-.4px;
+      text-shadow: 0 12px 36px rgba(0,0,0,.45);
+      font-weight:900;
+    }
+    .subtitle{
+      margin:0;
+      color: rgba(234,242,255,.82);
+      max-width: 62ch;
+      font-size: 15px;
+      line-height:1.45;
+      text-shadow: 0 10px 26px rgba(0,0,0,.45);
+    }
+    .credit{
+      padding:10px 16px 0 16px;
+      font-size:12.5px;
+      color: var(--muted2);
+    }
+    .credit a{color: rgba(234,242,255,.78); text-decoration:none; border-bottom:1px dotted rgba(234,242,255,.35)}
+    .credit a:hover{color: var(--text); border-bottom-color: rgba(234,242,255,.65)}
 
-    h1{
-      margin: 0;
-      font-size: clamp(24px, 3.6vw, 44px);
-      line-height: 1.06;
-      letter-spacing: -0.9px;
-      font-weight: 980;
-      text-shadow: 0 14px 40px rgba(0,0,0,.65);
-    }
-    .titleAccent{
-      display:inline-block;
-      padding-bottom: 4px;
-      background: linear-gradient(90deg, rgba(125,255,122,.98), rgba(25,184,106,.94));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .lead{
-      margin: 0;
-      color: rgba(255,255,255,.80);
-      font-size: clamp(14px, 1.5vw, 16px);
-      line-height: 1.5;
-      max-width: 92ch;
-    }
-
-    .photoCredit{
-      padding: 10px 14px 14px;
-      font-size: 12px;
-      color: rgba(255,255,255,.66);
-      border-top: 1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.22);
-    }
-    .photoCredit a{
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      color: rgba(255,255,255,.78);
-      transition: opacity .2s ease;
-    }
-    .photoCredit a:hover{ opacity:.9; }
-
-    /* Side card */
-    .sideCard{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 18px;
+    .side{
+      padding:18px;
       display:flex;
       flex-direction:column;
-      gap: 14px;
-      position:relative;
-      overflow:hidden;
+      gap:12px;
     }
-    .sideCard::after{
-      content:"";
-      position:absolute;
-      inset:-20%;
-      background:
-        radial-gradient(circle at 25% 20%, rgba(125,255,122,.10), transparent 45%),
-        radial-gradient(circle at 75% 35%, rgba(25,184,106,.08), transparent 48%);
-      pointer-events:none;
-      opacity:.9;
+    .side h3{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.2px;
     }
-    .sideCard > *{ position:relative; z-index:1; }
+    .side p{
+      margin:0;
+      color: var(--muted);
+      line-height:1.45;
+      font-size:14px;
+    }
+    .meta-row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:4px;
+    }
+    .meta{
+      padding:12px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+    }
+    .meta .k{font-size:12px;color:var(--muted2);margin-bottom:6px}
+    .meta .v{font-size:18px;font-weight:800}
+    .meta .v small{font-size:13px;font-weight:700;color:var(--muted)}
 
-    .statRow{
-      display:flex;
-      gap: 12px;
+    .btn{
+      appearance:none; border:0;
+      cursor:pointer;
+      padding:14px 16px;
+      border-radius: 16px;
+      color: #061428;
+      font-weight:900;
+      letter-spacing:.2px;
+      background: linear-gradient(90deg, rgba(78,163,255,1), rgba(45,107,255,1));
+      box-shadow: 0 18px 40px rgba(45,107,255,.26);
+      transition: transform .16s ease, filter .16s ease, box-shadow .16s ease;
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      width:100%;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-2px); filter:saturate(1.05); box-shadow: 0 22px 50px rgba(45,107,255,.33); }
+    .btn:active{ transform: translateY(0px) scale(.99); }
+    .btn.secondary{
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:none;
+      font-weight:800;
+    }
+    .btn.secondary:hover{
+      background: rgba(255,255,255,.11);
+      border-color: rgba(255,255,255,.20);
+      box-shadow: 0 14px 34px rgba(0,0,0,.25);
+    }
+
+    .section{margin-top:16px}
+    .section > .card{padding:18px}
+    .section h2{
+      margin:0 0 10px 0;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+
+    .quiz-card{
+      padding:18px;
+      overflow: visible; /* important: avoid text clipping */
+    }
+    .quiz-head{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
       flex-wrap:wrap;
     }
-    .pill{
-      flex:1 1 160px;
-      padding: 12px 12px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.10);
-      transition: transform .16s ease, background .2s ease;
-      min-width: 140px;
+    .q-label{
+      display:flex;flex-direction:column;gap:4px;
+      min-width: 220px;
     }
-    .pill:hover{
-      transform: translateY(-2px);
-      background: rgba(255,255,255,.08);
+    .q-label .small{
+      color: var(--muted2);
+      font-size:13px;
     }
-    .pill .k{ font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-    .pill .v{ font-weight: 900; font-size: 18px; letter-spacing:.2px; }
-
-    /* Buttons */
-    .btn{
-      appearance:none;
-      border:none;
-      cursor:pointer;
-      border-radius: 16px;
-      padding: 14px 16px;
-      font-weight: 950;
-      font-size: 15px;
-      color: rgba(6,20,11,.95);
-      background: linear-gradient(135deg, rgba(125,255,122,.98), rgba(25,184,106,.92));
-      box-shadow: 0 14px 32px rgba(0,0,0,.28);
-      transition: transform .15s ease, filter .2s ease, box-shadow .2s ease;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap: 10px;
-      width: 100%;
+    .q-label .big{
+      font-size:18px;
+      font-weight:900;
+      letter-spacing:.2px;
     }
-    .btn:hover{ transform: translateY(-2px); filter: brightness(1.03); }
-    .btn:active{ transform: translateY(0px) scale(.99); }
-
-    .btnGhost{
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.14);
-      box-shadow: none;
-      font-weight: 900;
-      color: rgba(255,255,255,.90);
-    }
-    .btnGhost:hover{ background: rgba(255,255,255,.09); }
-
-    /* Quiz */
-    .progressText{ font-size: 13px; color: var(--muted); }
-    .progressBar{
-      width: 240px;
+    .progress{
+      width: 260px; max-width: 100%;
       height: 10px;
       border-radius: 999px;
-      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
       overflow:hidden;
-      border:1px solid rgba(255,255,255,.10);
+      flex:0 0 auto;
     }
-    .progressBar > div{
+    .bar{
       height:100%;
       width:0%;
-      background: linear-gradient(90deg, rgba(125,255,122,.92), rgba(25,184,106,.92));
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(78,163,255,1), rgba(45,107,255,1));
       transition: width .35s ease;
     }
 
     .question{
-      padding: 18px 16px 10px;
-      font-size: clamp(18px, 2.2vw, 24px);
-      line-height:1.45;
-      letter-spacing: -0.25px;
-      font-weight: 850;
-      position:relative;
-      z-index:1;
+      margin-top:12px;
+      font-size: clamp(18px, 2.1vw, 28px);  /* bigger question */
+      font-weight:900;
+      line-height:1.18;
+      letter-spacing:-.25px;
     }
 
     .answers{
-      padding: 0 16px 18px;
+      margin-top:14px;
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      position:relative;
-      z-index:1;
+      gap:12px;
+    }
+    @media (max-width: 760px){
+      .answers{grid-template-columns: 1fr;}
     }
 
-    .answerBtn{
+    .opt{
+      width:100%;
       text-align:left;
-      padding: 16px 14px;
+      padding:16px 16px;
       border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.13);
       background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.92);
+      color: var(--text);
       cursor:pointer;
-      transition: transform .12s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
-      position:relative;
-      overflow:hidden;
-      min-height: 64px;
-      font-size: clamp(16px, 1.7vw, 19px);
-      line-height: 1.35;
-      font-weight: 750;
+      font-weight:800;
+      font-size: clamp(16px, 1.6vw, 20px); /* bigger answers */
+      line-height:1.3;
+      transition: transform .16s ease, background .16s ease, border-color .16s ease, box-shadow .16s ease;
+      box-shadow: 0 10px 28px rgba(0,0,0,.22);
+      user-select:none;
+      overflow: visible;
       white-space: normal;
       word-break: break-word;
     }
-    .answerBtn::after{
-      content:"";
-      position:absolute;
-      inset:-20%;
-      background:
-        radial-gradient(circle at 30% 20%, rgba(125,255,122,.16), transparent 45%),
-        radial-gradient(circle at 70% 60%, rgba(25,184,106,.14), transparent 50%);
-      opacity:0;
-      transition: opacity .25s ease;
-    }
-    .answerBtn:hover{
+    .opt:hover{
       transform: translateY(-2px);
-      background: rgba(255,255,255,.08);
-      border-color: rgba(255,255,255,.18);
-      box-shadow: 0 10px 26px rgba(0,0,0,.28);
+      background: rgba(255,255,255,.09);
+      border-color: rgba(255,255,255,.22);
+      box-shadow: 0 16px 36px rgba(0,0,0,.28);
     }
-    .answerBtn:hover::after{ opacity:1; }
-    .answerBtn:active{ transform: translateY(-1px) scale(.995); }
-
-    .answerBtn[disabled]{ cursor:not-allowed; opacity:.94; }
-    .answerBtn.correct{
-      border-color: rgba(109,255,201,.55);
-      background: rgba(109,255,201,.14);
-      box-shadow: 0 12px 30px rgba(109,255,201,.10);
+    .opt:active{ transform: translateY(0px) scale(.995); }
+    .opt[disabled]{ cursor:not-allowed; opacity:.95; }
+    .opt.correct{
+      border-color: rgba(78,226,165,.55);
+      background: rgba(78,226,165,.10);
+      box-shadow: 0 18px 44px rgba(78,226,165,.18);
     }
-    .answerBtn.wrong{
-      border-color: rgba(255,91,127,.55);
-      background: rgba(255,91,127,.12);
-      box-shadow: 0 12px 30px rgba(255,91,127,.08);
+    .opt.wrong{
+      border-color: rgba(255,107,107,.55);
+      background: rgba(255,107,107,.10);
+      box-shadow: 0 18px 44px rgba(255,107,107,.14);
     }
 
-    .cardFooter{
-      padding: 14px 16px 16px;
-      border-top: 1px solid rgba(255,255,255,.08);
-      display:flex;
-      gap: 12px;
-      align-items:flex-start;
-      justify-content:space-between;
-      flex-wrap:wrap;
-      position:relative;
-      z-index:1;
-    }
-    .note{
+    .hint{
+      margin-top:12px;
       color: var(--muted);
-      font-size: 13px;
-      line-height:1.4;
-      flex: 1 1 520px;
-      min-width: 0;
-      white-space: normal;
-      overflow: visible;
-      word-break: break-word;
-    }
-    .footerBtns{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      flex: 0 0 auto;
-      margin-left:auto;
-      justify-content:flex-end;
-    }
-    .footerBtns .btn{ width:auto; min-width: 180px; }
-
-    /* Result */
-    .resultBox{
-      padding: 18px 16px;
-      display:flex;
-      gap: 14px;
-      flex-wrap:wrap;
-      align-items:flex-start;
-      justify-content:space-between;
-      position:relative;
-      z-index:1;
-    }
-    .scoreBig{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      flex: 1 1 320px;
-      min-width: 0;
-    }
-    .scoreBig .num{
-      font-size: clamp(28px, 4vw, 44px);
-      font-weight: 950;
-      letter-spacing: -0.8px;
-      display:flex;
-      align-items:baseline;
-      gap: 10px;
-      flex-wrap:wrap;
-      white-space: normal;
-      overflow: visible;
-    }
-    .scoreMain{ font-size: 1.1em; }
-    .scoreSep{ opacity: .9; }
-    .scoreTotal{ opacity: .9; }
-
-    .scoreBig .sub{
-      color: var(--muted);
-      font-size: 14px;
+      font-size:14px;
       line-height:1.45;
+    }
+
+    .result-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      align-items:stretch;
+      margin-top:12px;
+    }
+    @media (max-width: 760px){
+      .result-grid{grid-template-columns: 1fr;}
+    }
+
+    .score{
+      padding:16px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      overflow: visible; /* avoid clipping */
+    }
+    .score .num{
+      font-size: clamp(46px, 6vw, 74px);
+      font-weight:950;
+      line-height: 1.02;
+      letter-spacing:-1px;
+      margin:0;
+      overflow: visible;
+    }
+    .score .txt{
+      margin:8px 0 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height:1.45;
+      overflow: visible;
       word-break: break-word;
     }
 
-    /* Toast */
-    .toast{
-      position: fixed;
-      left: 50%;
-      bottom: 20px;
-      transform: translateX(-50%) translateY(20px);
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.40);
-      backdrop-filter: blur(12px);
-      color: rgba(255,255,255,.92);
-      font-size: 13px;
-      opacity:0;
-      pointer-events:none;
-      transition: opacity .25s ease, transform .25s ease;
-      z-index: 999;
-      display:flex;
-      align-items:center;
-      gap: 8px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.45);
-    }
-    .toast.show{ opacity:1; transform: translateX(-50%) translateY(0); }
-
-    /* Footer */
-    footer{
-      padding: 26px 0 34px;
-      color: rgba(255,255,255,.68);
-      font-size: 13px;
+    .footer{
+      margin-top:22px;
       text-align:center;
-    }
-    .footerLine{
-      display:inline-block;
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      color: var(--muted2);
+      font-size:13.5px;
+      padding:10px 0 0;
     }
 
-    @media (max-width: 860px){
-      header{ display:none; }
-      html{ scroll-padding-top: 0px; }
-
-      .heroGrid{ grid-template-columns: 1fr; }
-      .heroMedia{ min-height: 260px; aspect-ratio: 16/9; }
-      .progressBar{ width: 100%; }
-      .answers{ grid-template-columns: 1fr; }
-      .footerBtns{ justify-content:stretch; width: 100%; }
-      .footerBtns .btn{ width:100%; min-width: 0; }
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      * { transition: none !important; animation: none !important; }
-      html { scroll-behavior: auto; }
-    }
+    .hidden{display:none !important;}
   </style>
 </head>
-
 <body>
-  <header>
-    <div class="container">
-      <div class="nav">
-        <div class="brand" aria-label="Название теста">
-          <span class="dot" aria-hidden="true"></span>
-          <span>Трансформаторы и линии электропередач</span>
-        </div>
-        <nav class="navlinks" aria-label="Навигация">
-          <a href="#top">Вверх</a>
-          <a href="#start">Начало</a>
-          <a href="#quiz">Тест</a>
-          <a href="#result">Результат</a>
-        </nav>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Шлюзы и судоподъёмники</span>
       </div>
+      <nav class="nav" aria-label="Навигация">
+        <a href="#cover">Обложка</a>
+        <a href="#start">Старт</a>
+        <a href="#quiz">Тест</a>
+        <a href="#result">Результат</a>
+      </nav>
     </div>
   </header>
 
-  <main id="top" class="container">
-    <!-- HERO -->
-    <section class="hero" aria-label="Обложка">
-      <div class="heroGrid">
-        <div class="heroMedia" aria-label="Фото трансформатора (горизонтальное)">
-          <!-- ✅ Основное фото + резерв -->
-          <img
-            id="heroImg"
-            src="https://vesti.energy-journals.ru/wp-content/uploads/2018/12/novyy-transformator-votkinskoy-gyes.jpg"
-            alt="Трансформатор на электростанции"
-            loading="eager"
-            referrerpolicy="no-referrer"
-          />
-          <div class="heroOverlay">
-            <div class="badge">15 вопросов · 4 варианта · 1 верный</div>
-            <h1><span class="titleAccent">Тест</span>: «Трансформаторы и линии электропередач»</h1>
-            <p class="lead">
-              Зачем повышают напряжение, как работает трансформатор и что важно знать про ЛЭП — по одному вопросу за раз
-            </p>
-          </div>
+  <main class="wrap">
+    <!-- Cover -->
+    <section id="cover" class="grid">
+      <div class="card hero" aria-label="Обложка">
+        <img
+          id="heroImg"
+          class="hero-img"
+          src="https://upload.wikimedia.org/wikipedia/commons/c/cd/FalkirkWheelSide_2004_SeanMcClean.jpg"
+          alt="Фолкеркское колесо — судоподъёмник"
+          loading="eager"
+          decoding="async"
+        />
+        <div class="hero-content">
+          <div class="badge">15 вопросов • 4 варианта • 1 верный</div>
+          <h1 class="title">Тест: «Шлюзы и судоподъёмники»</h1>
+          <p class="subtitle">
+            Отвечай по порядку: один вопрос — один выбор. В конце увидишь свой результат.
+          </p>
+        </div>
+      </div>
 
-          <div class="photoCredit" id="photoCredit">
-            Фото: <a href="https://vesti.energy-journals.ru/" target="_blank" rel="noopener">vesti.energy-journals.ru</a>
+      <aside class="card side">
+        <h3>Как проходит тест</h3>
+        <p>Нажми «Начать тест» — появится первый вопрос. Варианты ответов перемешиваются при каждом новом прохождении.</p>
+
+        <div class="meta-row">
+          <div class="meta">
+            <div class="k">Вопросов</div>
+            <div class="v"><span id="metaTotal">15</span></div>
+          </div>
+          <div class="meta">
+            <div class="k">Формат</div>
+            <div class="v">по одному</div>
           </div>
         </div>
 
-        <aside class="sideCard" aria-label="Инструкция">
-          <div>
-            <div class="sectionTitle">Как проходить</div>
-            <p class="sectionHint">
-              Нажмите «Начать тест» — появится первый вопрос. Варианты ответов перемешиваются при каждом новом прохождении
-            </p>
-          </div>
-
-          <div class="statRow" aria-label="Статистика">
-            <div class="pill">
-              <div class="k">Вопросов</div>
-              <div class="v" id="statQ">15</div>
-            </div>
-            <div class="pill">
-              <div class="k">Формат</div>
-              <div class="v">по одному</div>
-            </div>
-          </div>
-
-          <a class="btn" href="#start" id="jumpStart">
-            Перейти к старту <span aria-hidden="true">→</span>
-          </a>
-        </aside>
-      </div>
+        <button id="goStart" class="btn" type="button" onclick="document.querySelector('#start').scrollIntoView({behavior:'smooth'});">
+          Перейти к старту →
+        </button>
+      </aside>
     </section>
 
-    <!-- START -->
-    <section id="start" aria-label="Старт">
+    <div class="credit">
+      Фото: <a href="https://commons.wikimedia.org/wiki/File:FalkirkWheelSide_2004_SeanMcClean.jpg" target="_blank" rel="noopener">Sean Mack (Wikimedia Commons)</a>, лицензии CC BY-SA 3.0 / CC BY 2.5
+    </div>
+
+    <!-- Start -->
+    <section id="start" class="section">
       <div class="card">
-        <div class="cardHeader">
-          <div>
-            <div class="sectionTitle">Готовы начать?</div>
-            <p class="sectionHint">Выберите один вариант — следующий вопрос появится автоматически</p>
+        <h2>Готовы начать?</h2>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+          <div style="color:var(--muted);max-width:70ch;line-height:1.45">
+            Выберите один вариант ответа — следующий вопрос откроется автоматически.
           </div>
-          <div class="progressText" id="attemptText">Попытка: 1</div>
-        </div>
-        <div style="padding:16px; position:relative; z-index:1;">
-          <button class="btn" id="startBtn" type="button">
-            Начать тест <span aria-hidden="true">🟩</span>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- QUIZ -->
-    <section id="quiz" aria-label="Тест">
-      <div class="card" id="quizCard">
-        <div class="cardHeader">
-          <div>
-            <div class="sectionTitle">Вопрос</div>
-            <div class="progressText" id="progressText">—</div>
-          </div>
-          <div class="progressBar" aria-label="Прогресс">
-            <div id="progressFill"></div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <div style="color:var(--muted2);font-size:13px">Попытка: <b id="attempt">1</b></div>
           </div>
         </div>
 
-        <div class="question" id="questionText">
-          Нажмите «Начать тест», чтобы увидеть первый вопрос
-        </div>
-
-        <div class="answers" id="answersWrap" aria-label="Варианты ответов"></div>
-
-        <div class="cardFooter">
-          <div class="note" id="noteText">Выберите один вариант — после выбора откроется следующий вопрос</div>
-          <div class="footerBtns">
-            <a class="btn btnGhost" href="#start">К началу</a>
-          </div>
+        <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap">
+          <button id="startBtn" class="btn" type="button">Начать тест</button>
+          <button id="restartBtnTop" class="btn secondary hidden" type="button">Пройти ещё раз</button>
         </div>
       </div>
     </section>
 
-    <!-- RESULT -->
-    <section id="result" aria-label="Результат">
-      <div class="card">
-        <div class="cardHeader">
-          <div>
-            <div class="sectionTitle">Итог</div>
-            <p class="sectionHint">После 15-го ответа покажем результат и дадим пройти тест заново</p>
+    <!-- Quiz -->
+    <section id="quiz" class="section">
+      <div class="card quiz-card">
+        <div class="quiz-head">
+          <div class="q-label">
+            <div class="small">Вопрос <span id="qNum">—</span> из <span id="qTotal">—</span></div>
+            <div class="big">Вопрос</div>
+          </div>
+          <div class="progress" aria-label="Прогресс">
+            <div class="bar" id="bar"></div>
           </div>
         </div>
 
-        <div class="resultBox">
-          <div class="scoreBig">
-            <div class="num" id="scoreNum">—</div>
-            <div class="sub" id="scoreSub">Нажмите «Начать тест», чтобы пройти опрос</div>
-          </div>
+        <div id="questionText" class="question">Нажмите «Начать тест»</div>
 
-          <div style="display:flex; gap:10px; flex-wrap:wrap; width:min(420px,100%); justify-content:flex-end; position:relative; z-index:1;">
-            <button class="btn btnGhost" id="restartBtn" type="button">Пройти ещё раз</button>
-            <a class="btn" href="#top">На обложку ↑</a>
+        <div id="answers" class="answers"></div>
+
+        <div class="hint" id="hint">
+          Подсказка: карточки ответов делаем одинаковой высоты, чтобы «самый длинный вариант» не бросался в глаза.
+        </div>
+      </div>
+    </section>
+
+    <!-- Result -->
+    <section id="result" class="section">
+      <div class="card quiz-card">
+        <div class="quiz-head">
+          <div class="q-label">
+            <div class="small">Финиш</div>
+            <div class="big">Результат</div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button id="toCover" class="btn secondary" type="button">На обложку ↑</button>
+            <button id="restartBtn" class="btn" type="button">Пройти ещё раз</button>
+          </div>
+        </div>
+
+        <div class="question" style="margin-top:12px">Тест завершён! 🎉</div>
+        <p id="resultLine" style="margin:10px 0 0 0;color:var(--muted);line-height:1.45">
+          Результат показан ниже. Можно пройти ещё раз — варианты ответов снова перемешаются.
+        </p>
+
+        <div class="result-grid">
+          <div class="score">
+            <p class="num" id="scoreNum">—</p>
+            <p class="txt" id="scoreTxt">Вы дали 0 правильных ответов из 15</p>
+          </div>
+          <div class="score" style="display:flex;flex-direction:column;justify-content:center;gap:10px">
+            <button id="restartBtn2" class="btn" type="button">Пройти ещё раз</button>
+            <button id="toStart" class="btn secondary" type="button">К началу</button>
           </div>
         </div>
       </div>
     </section>
 
-    <footer aria-label="Подпись">
-      <span class="footerLine">
-        Команда "КапибаРита". Подготовка к соревнованиям "Энергия в действии". 2026.
-      </span>
-    </footer>
+    <div class="footer">
+      Команда "КапибаРита". Подготовка к соревнованиям "Энергия в действии". 2026.
+    </div>
   </main>
 
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
   <script>
-    // анти-угадайка по длине (можно выключить)
-    const ANTI_LONGEST_BIAS = true;
-    const ANTI_LONGEST_PROB = 0.85;
-    const ANTI_LONGEST_TRIES = 12;
-
-    // ✅ Фото: основной URL + резерв URL (по запросу пользователя)
-    (function(){
-      const img = document.getElementById("heroImg");
-      const credit = document.getElementById("photoCredit");
-      img.onerror = () => {
-        img.onerror = null;
-        img.src = "https://sdelanounas.ru/i/y/s/5/f_YS5yYWRpa2FsLnJ1L2ExNi8yMDExLzc5L2M5ZTAyNTZkNWFhNy5qcGc_X19pZD0xMzc2NTA=.jpeg";
-        credit.innerHTML = `Фото: <a href="https://sdelanounas.ru/" target="_blank" rel="noopener">sdelanounas.ru</a>`;
-      };
-    })();
-
-    // ==========================
-    // Тест: Трансформаторы и линии электропередач
-    // ✅ В концах ответов точек нет
-    // ==========================
-    const QUESTIONS = [
-      {
-        q: "1. Что такое трансформатор?",
-        options: [
-          { id:"A", text:"Это устройство, которое изменяет силу тока в цепи, делая ток больше или меньше" },
-          { id:"B", text:"Это устройство, которое изменяет напряжение переменного тока (может повышать или понижать)" },
-          { id:"C", text:"Это устройство, которое накапливает электроэнергию и отдаёт её по команде" },
-          { id:"D", text:"Это устройство, которое преобразует переменный ток в постоянный для питания приборов" }
-        ],
-        correctId:"B"
-      },
-      {
-        q: "2. Что такое напряжение?",
-        options: [
-          { id:"A", text:"Это количество электричества, которое проходит по проводам за секунду" },
-          { id:"B", text:"Это свойство провода, которое мешает току двигаться и вызывает нагрев" },
-          { id:"C", text:"Это скорость движения зарядов по проводнику при работе устройства" },
-          { id:"D", text:"Это “электрическое давление”, которое помогает току двигаться по проводам" }
-        ],
-        correctId:"D"
-      },
-      {
-        q: "3. Зачем на электростанции (в том числе на ГЭС) повышают напряжение перед передачей энергии на далекие расстояния?",
-        options: [
-          { id:"A", text:"Чтобы уменьшить потери при передаче: провода меньше нагреваются, и меньше энергии теряется по пути" },
-          { id:"B", text:"Чтобы увеличить ток в проводах и тем самым передать больше мощности" },
-          { id:"C", text:"Чтобы электроэнергия “быстрее” дошла до города на большие расстояния" },
-          { id:"D", text:"Чтобы уменьшить частоту тока, потому что низкая частота лучше проходит по линиям" }
-        ],
-        correctId:"A"
-      },
-      {
-        q: "4. Почему трансформатор не “создаёт” электричество?",
-        options: [
-          { id:"A", text:"Потому что он не может работать без охлаждения, масла и системы защиты" },
-          { id:"B", text:"Потому что электричество создаётся только на электростанциях, а в сети оно не появляется" },
-          { id:"C", text:"Он только преобразует уже полученную электроэнергию — меняет её напряжение" },
-          { id:"D", text:"Потому что трансформатор сам потребляет энергию и “забирает” её из сети" }
-        ],
-        correctId:"C"
-      },
-      {
-        q: "5. Почему обычный трансформатор работает с переменным током?",
-        options: [
-          { id:"A", text:"Потому что переменный ток всегда безопаснее постоянного при тех же условиях" },
-          { id:"B", text:"Потому что для работы нужно изменяющееся магнитное поле, а оно появляется при переменном токе" },
-          { id:"C", text:"Потому что переменный ток не вызывает нагрев проводов при передаче по ЛЭП" },
-          { id:"D", text:"Потому что постоянный ток нельзя передавать на расстояние через провода" }
-        ],
-        correctId:"B"
-      },
-      {
-        q: "6. Назовите три основные части трансформатора?",
-        options: [
-          { id:"A", text:"Корпус, предохранители и система охлаждения" },
-          { id:"B", text:"Опоры, изоляторы и траверсы, как на воздушной линии" },
-          { id:"C", text:"Генератор, турбина и водовод, если рядом ГЭС" },
-          { id:"D", text:"Магнитопровод (сердечник), первичная обмотка, вторичная обмотка" }
-        ],
-        correctId:"D"
-      },
-      {
-        q: "7. Какая обмотка называется первичной, а какая — вторичной?",
-        options: [
-          { id:"A", text:"Первичная — на неё подают входное напряжение; вторичная — с неё получают выходное напряжение" },
-          { id:"B", text:"Первичная — это всегда обмотка с большим числом витков, вторичная — с меньшим" },
-          { id:"C", text:"Первичная — та, что ближе к сердечнику, вторичная — та, что дальше от сердечника" },
-          { id:"D", text:"Первичная — та, что даёт выход в сеть, вторичная — та, что принимает энергию от линии" }
-        ],
-        correctId:"A"
-      },
-      {
-        q: "8. Как понять, будет трансформатор повышающим или понижающим?",
-        options: [
-          { id:"A", text:"Если сердечник больше по размеру — трансформатор повышающий, если меньше — понижающий" },
-          { id:"B", text:"Если провода толще во вторичной обмотке — трансформатор всегда повышающий по напряжению" },
-          { id:"C", text:"Если во вторичной обмотке витков больше — трансформатор повышает напряжение; если витков меньше — понижает" },
-          { id:"D", text:"Если частота тока выше — трансформатор повышающий, если ниже — понижающий" }
-        ],
-        correctId:"C"
-      },
-      {
-        q: "9. Что такое линия электропередачи (ЛЭП)?",
-        options: [
-          { id:"A", text:"Это система труб и каналов, по которым доставляют воду на электростанции" },
-          { id:"B", text:"Это линия (система проводов и оборудования), по которой передают электроэнергию от электростанций к подстанциям и потребителям" },
-          { id:"C", text:"Это участок электростанции, где электричество “производят” перед подачей в сеть" },
-          { id:"D", text:"Это набор приборов, которые измеряют напряжение и ток на территории города" }
-        ],
-        correctId:"B"
-      },
-      {
-        q: "10. Какие бывают линии электропередачи по способу прокладки?",
-        options: [
-          { id:"A", text:"Однофазные и трёхфазные, в зависимости от числа проводников" },
-          { id:"B", text:"Высоковольтные и низковольтные, в зависимости от уровня напряжения" },
-          { id:"C", text:"Постоянного и переменного тока, в зависимости от типа энергии в линии" },
-          { id:"D", text:"Воздушные (по опорам на воздухе) и кабельные (под землёй или под водой)" }
-        ],
-        correctId:"D"
-      },
-      {
-        q: "11. Почему провода воздушных ЛЭП поднимают высоко над землёй?",
-        options: [
-          { id:"A", text:"Чтобы обеспечить безопасное расстояние до людей, транспорта, деревьев и зданий" },
-          { id:"B", text:"Чтобы уменьшить сопротивление проводов за счёт большей высоты над грунтом" },
-          { id:"C", text:"Чтобы ветер постоянно охлаждал провода и полностью убирал нагрев" },
-          { id:"D", text:"Чтобы провода всегда были ближе к молниям и принимали разряд на себя" }
-        ],
-        correctId:"A"
-      },
-      {
-        q: "12. Назовите основные элементы воздушной ЛЭП?",
-        options: [
-          { id:"A", text:"Провода, трансформаторы, распределительные щиты, выключатели и счётчики" },
-          { id:"B", text:"Опоры, кабель-каналы, подземные трубы, колодцы и муфты соединения" },
-          { id:"C", text:"Провода, опоры, траверсы/крепления, изоляторы, крепёжная арматура (и часто защитные тросы)" },
-          { id:"D", text:"Провода, генераторы, турбины, водоводы и затворы для управления потоком" }
-        ],
-        correctId:"C"
-      },
-      {
-        q: "13. Зачем на ЛЭП нужны изоляторы?",
-        options: [
-          { id:"A", text:"Чтобы усиливать сигнал и уменьшать потери мощности в проводах" },
-          { id:"B", text:"Чтобы крепить провод, но при этом не допускать перехода электричества на опору" },
-          { id:"C", text:"Чтобы защищать провод от дождя и снега и делать его более прочным" },
-          { id:"D", text:"Чтобы уменьшать провисание провода за счёт дополнительной опоры" }
-        ],
-        correctId:"B"
-      },
-      {
-        q: "14. Что такое подстанция и зачем она нужна в энергосистеме?",
-        options: [
-          { id:"A", text:"Это место, где электроэнергию вырабатывают с помощью турбин и генераторов" },
-          { id:"B", text:"Это место, где электроэнергию накапливают в больших аккумуляторах и выдают по графику" },
-          { id:"C", text:"Это место, где электроэнергию измеряют счётчиками и продают потребителям по тарифам" },
-          { id:"D", text:"Это место, где электроэнергию преобразуют и распределяют (например, изменяют напряжение и отправляют дальше по сети)" }
-        ],
-        correctId:"D"
-      },
-      {
-        q: "15. Какое правило безопасности самое важное при виде оборванного провода?",
-        options: [
-          { id:"A", text:"Подойти ближе и убедиться глазами, есть ли искры или звук треска" },
-          { id:"B", text:"Оттащить провод палкой или верёвкой, чтобы он не мешал проходу людей" },
-          { id:"C", text:"Не подходить и не трогать — оборванный провод может быть под напряжением; нужно отойти и сообщить взрослым/в экстренные службы (держаться на безопасном расстоянии)" },
-          { id:"D", text:"Перешагнуть провод одним быстрым шагом и уйти подальше, не задерживаясь" }
-        ],
-        correctId:"C"
-      }
-    ];
-
-    // Helpers
-    const $ = (sel) => document.querySelector(sel);
+    // ---------- Helpers ----------
+    const $ = (sel, root=document) => root.querySelector(sel);
 
     function shuffle(arr){
       const a = arr.slice();
@@ -883,192 +543,317 @@
       return a;
     }
 
-    function isCorrectLongest(q){
-      const correct = q.options.find(o => o.id === q.correctId);
-      if(!correct) return false;
-      const maxLen = Math.max(...q.options.map(o => (o.text || "").length));
-      return (correct.text || "").length === maxLen;
+    function tidy(text){
+      // убираем конечные точки/точки с запятой/лишние пробелы (не трогаем смысл)
+      let t = String(text).trim();
+      t = t.replace(/\s+/g, " ");
+      t = t.replace(/[.;]\s*$/g, ""); // только в самом конце
+      return t;
     }
 
-    function shuffleWithAntiLongest(question){
-      let out = {
-        q: question.q,
-        correctId: question.correctId,
-        options: shuffle(question.options)
-      };
+    function equalizeOptionHeights(){
+      const btns = Array.from(document.querySelectorAll(".opt"));
+      if(!btns.length) return;
+      // reset first
+      btns.forEach(b => b.style.minHeight = "0px");
+      requestAnimationFrame(() => {
+        const heights = btns.map(b => b.scrollHeight);
+        const maxH = Math.max(...heights);
+        btns.forEach(b => b.style.minHeight = maxH + "px");
+      });
+    }
 
-      if(!ANTI_LONGEST_BIAS) return out;
-
-      let tries = 0;
-      while(tries < ANTI_LONGEST_TRIES){
-        if(isCorrectLongest(out) && Math.random() < ANTI_LONGEST_PROB){
-          out.options = shuffle(out.options);
-          tries++;
-          continue;
-        }
-        break;
+    // ---------- Quiz data ----------
+    const baseQuestions = [
+      {
+        q: "Что такое шлюз?",
+        options: [
+          "Это сооружение, которое защищает берега от размыва и удерживает русло в нужной форме",
+          "Это гидротехническое сооружение, которое помогает судам переходить между участками воды с разными уровнями",
+          "Это устройство, которое разгоняет судно перед проходом узкого участка и снижает сопротивление воды",
+          "Это канал, который всегда идёт в обход плотины и работает без изменения уровня воды"
+        ],
+        correct: 1
+      },
+      {
+        q: "Что такое шлюзование?",
+        options: [
+          "Это процесс перемещения судна из одного бьефа в другой через шлюз",
+          "Это движение судна по судоходному каналу без изменения уровня воды в течение всего пути",
+          "Это проверка герметичности ворот и стен камеры перед тем, как пустить суда по маршруту",
+          "Это работа лоцмана, который ведёт судно через опасные участки реки около плотины"
+        ],
+        correct: 0
+      },
+      {
+        q: "Что такое бьеф (верхний и нижний)?",
+        options: [
+          "Бьеф — участок воды с определённой скоростью течения: верхний быстрее, нижний медленнее",
+          "Бьеф — участок воды с определённым уровнем: верхний бьеф — где уровень выше, нижний бьеф — где уровень ниже",
+          "Бьеф — часть реки у берега: верхний у правого берега, нижний у левого берега",
+          "Бьеф — участок воды у плотины: верхний всегда после плотины, нижний всегда перед плотиной"
+        ],
+        correct: 1
+      },
+      {
+        q: "Что такое герметичная камера шлюза?",
+        options: [
+          "Это часть шлюза между воротами, где можно менять уровень воды (поднимать или опускать судно вместе с водой)",
+          "Это помещение для хранения механизмов ворот, куда вода не попадает при любой работе шлюза",
+          "Это участок канала перед воротами, где судно ждёт своей очереди, пока камера занята",
+          "Это место в нижнем бьефе, где вода успокаивается после сброса, чтобы не было сильных волн"
+        ],
+        correct: 0
+      },
+      {
+        q: "Что такое водовод (водопроводное устройство) в шлюзе?",
+        options: [
+          "Это система, которая наполняет камеру водой или опустошает её, чтобы менять уровень воды",
+          "Это труба для подачи питьевой воды персоналу и для пожарной безопасности сооружения",
+          "Это устройство для откачки воды из реки в водохранилище при маловодье и ремонтах",
+          "Это канал, который используется только для прохода мелких судов без шлюзования"
+        ],
+        correct: 0
+      },
+      {
+        q: "Что такое перепускной клапан в шлюзе и зачем он нужен?",
+        options: [
+          "Это устройство, которое открывают, чтобы вода перетекала (например, из камеры в нижний бьеф), и уровень в камере менялся",
+          "Это механизм на воротах, который фиксирует их в закрытом положении и не даёт воде продавить створки",
+          "Это клапан в днище судна, который открывают перед входом в камеру для выравнивания давления",
+          "Это устройство, которое используется только при аварии, чтобы полностью слить воду из водохранилища"
+        ],
+        correct: 0
+      },
+      {
+        q: "Что такое судоподъёмник (судовой лифт)?",
+        options: [
+          "Это комплекс механизмов, который поднимает и спускает суда между разными уровнями воды",
+          "Это система шлюзовых камер, которые работают по очереди и плавно меняют уровень воды",
+          "Это участок реки с сильным течением, где суда “подтягиваются” лебёдками к верхнему бьефу",
+          "Это плавучий кран, который переносит суда через плотину по воздуху над водой"
+        ],
+        correct: 0
+      },
+      {
+        q: "Почему иногда нельзя построить обычный шлюз (или цепочку шлюзов)?",
+        options: [
+          "При большом перепаде высот шлюзование становится неудобным: нужно много камер, требуется большая территория и пропускная способность может быть низкой",
+          "Потому что шлюзы можно строить только на морских каналах, а на реках их строить запрещено",
+          "Потому что при большом перепаде высот вода в камере обязательно закипит и разрушит стены шлюза",
+          "Потому что шлюзы работают только для малых судов, а для больших судов всегда нужен только судоподъёмник"
+        ],
+        correct: 0
+      },
+      {
+        q: "Что такое перепад высот на водном пути?",
+        options: [
+          "Это разница уровней воды между верхним и нижним бьефами",
+          "Это разница скоростей течения воды до и после плотины на одном участке",
+          "Это разница ширины русла в верхнем и нижнем бьефе около шлюза",
+          "Это разница температуры воды в водохранилище и в нижнем бьефе у плотины"
+        ],
+        correct: 0
+      },
+      {
+        q: "Какой судоподъёмник установлен на Красноярской ГЭС?",
+        options: [
+          "Вертикальный судоподъёмник, где камера поднимается строго вверх как лифт",
+          "Вращающийся судоподъёмник, где камеры вращаются как колесо вокруг оси",
+          "Продольно-наклонный судоподъёмник (камера движется по наклонному пути)",
+          "Каскадный шлюз, где суда проходят через несколько камер подряд без механического подъёма"
+        ],
+        correct: 2
+      },
+      {
+        q: "Что такое Фолкеркское колесо?",
+        options: [
+          "Это судоподъёмник в Шотландии — первый и единственный в мире вращающийся судоподъёмник",
+          "Это шлюз в Великобритании, который работает только на приливах и отливах и не имеет ворот",
+          "Это наклонный судоподъёмник в Норвегии, который тянет камеру тросом по рельсам в гору",
+          "Это система из трёх обычных шлюзов, которые сделали круглыми ради уменьшения волн и течений"
+        ],
+        correct: 0
+      },
+      {
+        q: "На каком законе основана “сбалансированность” Фолкеркского колеса?",
+        options: [
+          "На законе Бернулли, потому что скорость потока и давление уравновешивают камеры при вращении",
+          "На силе Архимеда (судно вытесняет воду, поэтому общий “вес” камеры остаётся одинаковым)",
+          "На законе Ньютона, потому что сила тяжести компенсируется ускорением при вращении колеса",
+          "На законе Ома, потому что ток в приводе распределяется равномерно и вращение остаётся ровным"
+        ],
+        correct: 1
+      },
+      {
+        q: "Чем судоподъёмник отличается от шлюза?",
+        options: [
+          "Шлюз меняет уровень воды в камере, а судоподъёмник поднимает/перевозит судно механизмом (как лифт, по наклону или вращением)",
+          "Судоподъёмник работает только для барж, а шлюз — только для пассажирских судов и катеров",
+          "Шлюз всегда строят на море, а судоподъёмник — только на реках возле ГЭС",
+          "Шлюз переносит судно по воздуху на платформе, а судоподъёмник просто изменяет уровень воды"
+        ],
+        correct: 0
+      },
+      {
+        q: "Какие основные виды судоподъёмников нужно знать?",
+        options: [
+          "Погружной, надувной, насосный (вода поднимает судно давлением в трубе)",
+          "Портовый, береговой, плавучий (по месту установки у воды)",
+          "Канальный, речной, морской (по месту применения на путях)",
+          "Вертикальный (как лифт), наклонный (камера едет по наклонному пути), вращающийся (как колесо)"
+        ],
+        correct: 3
+      },
+      {
+        q: "Зачем судоподъёмники строят на ГЭС?",
+        options: [
+          "Чтобы увеличить скорость течения в нижнем бьефе и улучшить самоочистку русла у плотины",
+          "Потому что плотина создаёт перепад уровней воды, а судоподъёмник помогает сохранить судоходство — проводить суда сверху вниз и обратно",
+          "Чтобы уменьшить высоту плотины без потери напора и сделать работу гидроагрегатов более стабильнее",
+          "Чтобы направлять суда только в одну сторону, исключая встречное движение и ожидание у ворот"
+        ],
+        correct: 1
       }
-      return out;
-    }
+    ].map(x => ({...x, q: tidy(x.q), options: x.options.map(tidy)}));
 
-    function showToast(text, kind){
-      const toast = $("#toast");
-      toast.textContent = text;
-      toast.style.borderColor = kind === "ok" ? "rgba(109,255,201,.35)" : "rgba(255,91,127,.35)";
-      toast.classList.add("show");
-      clearTimeout(showToast._t);
-      showToast._t = setTimeout(()=> toast.classList.remove("show"), 900);
-    }
-
-    // State
+    // ---------- State ----------
     let attempt = 1;
-    let runQuestions = [];
+    let prepared = [];
     let idx = -1;
     let score = 0;
     let locked = false;
-    let prevOrders = null;
 
-    // UI
-    const startBtn = $("#startBtn");
-    const restartBtn = $("#restartBtn");
-    const attemptText = $("#attemptText");
-    const questionText = $("#questionText");
-    const answersWrap = $("#answersWrap");
-    const progressText = $("#progressText");
-    const progressFill = $("#progressFill");
-    const noteText = $("#noteText");
-    const scoreNum = $("#scoreNum");
-    const scoreSub = $("#scoreSub");
-
-    function buildRunQuestions(){
-      const built = QUESTIONS.map(q => shuffleWithAntiLongest(q));
-      const orders = built.map(b => b.options.map(o => o.id).join("|"));
-
-      // гарантируем, что хотя бы один вопрос реально поменял порядок
-      if(prevOrders && orders.every((o,i)=> o === prevOrders[i])){
-        const b0 = built[0];
-        if(b0.options.length >= 2){
-          [b0.options[0], b0.options[1]] = [b0.options[1], b0.options[0]];
-          orders[0] = b0.options.map(o => o.id).join("|");
-        }
-      }
-
-      prevOrders = orders;
-      return built;
+    // ---------- Prepare quiz (shuffle options each attempt) ----------
+    function prepareQuiz(){
+      prepared = baseQuestions.map(item => {
+        const tagged = item.options.map((text, i) => ({ text, origIndex:i }));
+        const shuffled = shuffle(tagged);
+        const correctIndex = shuffled.findIndex(o => o.origIndex === item.correct);
+        return { q: item.q, options: shuffled.map(o => o.text), correct: correctIndex };
+      });
     }
 
-    function setScoreDisplay(correct, total){
-      scoreNum.innerHTML = `
-        <span class="scoreMain">${correct}</span>
-        <span class="scoreSep">/</span>
-        <span class="scoreTotal">${total}</span>
-      `;
+    // ---------- Render ----------
+    function updateMeta(){
+      $("#qTotal").textContent = prepared.length;
+      $("#metaTotal").textContent = prepared.length;
+      $("#attempt").textContent = attempt;
     }
 
-    function newAttempt(){
-      runQuestions = buildRunQuestions();
-      idx = 0;
-      score = 0;
-      locked = false;
-
-      attemptText.textContent = `Попытка: ${attempt}`;
-      scoreNum.textContent = "—";
-      scoreSub.textContent = "Отвечайте на вопросы — итог появится после 15-го ответа";
-
-      renderQuestion();
+    function setProgress(){
+      const pct = Math.max(0, Math.min(100, (idx / prepared.length) * 100));
+      $("#bar").style.width = pct + "%";
+      $("#qNum").textContent = (idx >= 0 ? (idx+1) : "—");
     }
 
     function renderQuestion(){
-      const total = runQuestions.length;
-      const q = runQuestions[idx];
+      locked = false;
+      const item = prepared[idx];
+      $("#questionText").textContent = item.q;
+      $("#answers").innerHTML = "";
 
-      progressText.textContent = `Вопрос ${idx + 1} из ${total}`;
-      progressFill.style.width = `${(idx / total) * 100}%`;
-
-      questionText.textContent = q.q;
-
-      answersWrap.innerHTML = "";
-      q.options.forEach(opt => {
+      item.options.forEach((optText, i) => {
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.className = "answerBtn";
-        btn.textContent = opt.text;
-        btn.addEventListener("click", () => choose(opt.id, btn));
-        answersWrap.appendChild(btn);
+        btn.className = "opt";
+        btn.textContent = optText;
+        btn.addEventListener("click", () => choose(i, btn));
+        $("#answers").appendChild(btn);
       });
 
-      noteText.textContent = "Выберите один вариант — после выбора откроется следующий вопрос";
-      locked = false;
+      // make all options equal height (reduces "longest answer" hint)
+      equalizeOptionHeights();
+
+      // update header + progress
+      $("#qNum").textContent = idx + 1;
+      $("#qTotal").textContent = prepared.length;
+      $("#bar").style.width = ((idx) / prepared.length) * 100 + "%";
+
+      // scroll to quiz
+      document.querySelector("#quiz").scrollIntoView({behavior:"smooth", block:"start"});
     }
 
-    function choose(chosenId, chosenBtn){
+    function showResult(){
+      $("#bar").style.width = "100%";
+      $("#qNum").textContent = prepared.length;
+      $("#questionText").textContent = "Готово!";
+      $("#answers").innerHTML = "";
+      $("#scoreNum").textContent = String(score);
+      $("#scoreTxt").textContent = `Вы дали ${score} правильных ответов из ${prepared.length}`;
+
+      $("#restartBtnTop").classList.remove("hidden");
+      document.querySelector("#result").scrollIntoView({behavior:"smooth", block:"start"});
+    }
+
+    // ---------- Choice ----------
+    function choose(choiceIndex, btnEl){
       if(locked) return;
       locked = true;
 
-      const q = runQuestions[idx];
-      const isCorrect = chosenId === q.correctId;
-
-      const buttons = [...answersWrap.querySelectorAll("button")];
+      const item = prepared[idx];
+      const buttons = Array.from(document.querySelectorAll(".opt"));
       buttons.forEach(b => b.disabled = true);
 
-      if(isCorrect){
-        score++;
-        chosenBtn.classList.add("correct");
-        showToast("Верно ✓", "ok");
-      } else {
-        chosenBtn.classList.add("wrong");
-        const correctOpt = q.options.find(o => o.id === q.correctId);
-        const correctBtn = buttons.find(b => b.textContent === correctOpt?.text);
+      const isCorrect = choiceIndex === item.correct;
+      if(isCorrect){ score++; btnEl.classList.add("correct"); }
+      else{
+        btnEl.classList.add("wrong");
+        // highlight correct
+        const correctBtn = buttons[item.correct];
         if(correctBtn) correctBtn.classList.add("correct");
-        showToast("Неверно ✕", "bad");
       }
 
-      progressFill.style.width = `${((idx + 1) / runQuestions.length) * 100}%`;
-
       setTimeout(() => {
-        if(idx < runQuestions.length - 1){
-          idx++;
-          renderQuestion();
-          document.querySelector("#quiz").scrollIntoView({ behavior: "smooth", block: "start" });
-        } else {
-          finish();
-        }
+        idx++;
+        setProgress();
+        if(idx >= prepared.length) showResult();
+        else renderQuestion();
       }, 650);
     }
 
-    function finish(){
-      questionText.textContent = "Тест завершён! 🎉";
-      answersWrap.innerHTML = "";
-      noteText.textContent = "Результат показан ниже. Можно пройти ещё раз — варианты ответов снова перемешаются";
-
-      const total = runQuestions.length;
-      setScoreDisplay(score, total);
-      scoreSub.textContent = `Вы дали ${score} правильных ответов из ${total}`;
-
-      document.querySelector("#result").scrollIntoView({ behavior: "smooth", block: "start" });
+    // ---------- Controls ----------
+    function start(){
+      score = 0;
+      idx = 0;
+      prepareQuiz();
+      updateMeta();
+      setProgress();
+      renderQuestion();
     }
 
-    startBtn.addEventListener("click", () => {
-      if(idx === -1){
-        newAttempt();
-      } else {
-        attempt++;
-        newAttempt();
-      }
-      document.querySelector("#quiz").scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-
-    restartBtn.addEventListener("click", () => {
+    function restart(){
       attempt++;
-      newAttempt();
-      document.querySelector("#quiz").scrollIntoView({ behavior: "smooth", block: "start" });
-    });
+      $("#attempt").textContent = attempt;
+      $("#restartBtnTop").classList.add("hidden");
+      start();
+    }
+
+    // ---------- Image fallback ----------
+    (function setupHeroImage(){
+      const img = $("#heroImg");
+      const reserve = "https://img-fotki.yandex.ru/get/4516/30348152.f5/0_54a13_6cee9978_orig";
+      let triedReserve = false;
+      img.addEventListener("error", () => {
+        if(triedReserve) return;
+        triedReserve = true;
+        img.src = reserve;
+      });
+    })();
+
+    // ---------- Wire UI ----------
+    $("#startBtn").addEventListener("click", start);
+    $("#restartBtn").addEventListener("click", restart);
+    $("#restartBtn2").addEventListener("click", restart);
+    $("#restartBtnTop").addEventListener("click", restart);
+
+    $("#toCover").addEventListener("click", () => document.querySelector("#cover").scrollIntoView({behavior:"smooth"}));
+    $("#toStart").addEventListener("click", () => document.querySelector("#start").scrollIntoView({behavior:"smooth"}));
 
     // Init
-    $("#statQ").textContent = String(QUESTIONS.length);
-    answersWrap.innerHTML = "";
-    idx = -1;
-    attemptText.textContent = `Попытка: ${attempt}`;
+    prepareQuiz();
+    updateMeta();
+    setProgress();
   </script>
 </body>
 </html>
